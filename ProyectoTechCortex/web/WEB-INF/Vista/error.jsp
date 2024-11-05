@@ -1,13 +1,17 @@
+<%-- 
+    Document   : error
+    Created on : 26 oct. 2024, 9:45:22 p. m.
+    Author     : ed_ua
+--%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title></title>
+        <title>JSP Page</title>
     </head>
     <body>
-        <div>
-            <%response.sendRedirect("ControladorCarrusel?accion=carrusel");%>
-        </div>
+        <h1>Hello World!</h1>
     </body>
 </html>
