@@ -1,9 +1,3 @@
-<%-- 
-    Document   : error
-    Created on : 26 oct. 2024, 9:45:22 p. m.
-    Author     : ed_ua
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>

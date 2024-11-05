@@ -8,7 +8,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style-slider-brand.css"/> 
+        <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/Assets/CSS/style-slider-brand.css"/> 
         <title>Carrusel de Marcas</title>
     </head>
     <body>
@@ -21,6 +21,6 @@
         </div>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
-        <script type="text/javascript" src="${pageContext.request.contextPath}/js/slider-brand-menu.js"></script> 
+        <script type="text/javascript" src="<%=request.getContextPath()%>/Assets/JS/slider-brand-menu.js"></script> 
     </body>
 </html>
