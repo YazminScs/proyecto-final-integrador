@@ -1,0 +1,143 @@
+
+.bg-body {
+background: url(https://media.istockphoto.com/id/1303182525/es/foto/fondo-abstracto-blanco-azul-claro-degradado-de-color-p%C3%BArpura-desenfocado.jpg?s=612x612&w=0&k=20&c=cWDzgcPOCGDqzmMS0tOOpri65oN7BMVDWQPmAKFEPxY=) no-repeat top center / cover, black;
+
+}
+
+.icon-logo {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    border-radius: 50px;
+    font-size: 19px;
+}
+
+.navbar {
+    background-color: rgb(255, 255, 255);
+    height: 70px ;
+    margin: 20px ;
+    border-radius: 50px ;
+    padding: 0.5rem;
+    transition: background-color 0.3s ;
+}
+
+.navbar:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.navbar-brand {
+    color: black;
+    font-weight: bold ;
+    font-size: 900px;
+    display: flex ;
+    flex-direction: row ;
+    justify-content: center;
+    align-items: center ;
+    text-shadow: #fff 1px 1px;
+}
+
+.login-button {
+    background-color: #9D79AE;
+    color: #fff;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 8px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    border: cornsilk;
+    transition: background-color 0.3s;
+}
+
+.login-button:hover{
+    background-color: #431459;
+    text-shadow: #000 1px 1px;
+}
+
+.navbar-toggler {
+    border: none !important;
+    font-size: 1.25rem;
+}
+
+.navbar-toggler:focus,
+.btn-close:focus{
+    box-shadow: none;
+    outline: none;
+}
+
+.nav-link {
+    color: #666777;
+    font-weight: 500;
+    font-size: 1.2rem!important;
+    position: relative;
+    transition: color 0.5s;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    font-weight: bolder;
+    color: #000;
+    text-shadow: whitesmoke 0.2px 0.2px;
+}
+
+.dropdown-menu {
+    background-color: #fff ;
+    border-radius: 5px ;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9) ;
+    padding: 5px ;
+    margin-left: 10px ;
+    transition: all 0.5s ease-out;
+}
+
+.dropdown-item, .nav-link {
+    color: #666777 ;
+    font-size: 1.2rem !important;
+    padding: 10px 20px ;
+    border-radius: 5px ;
+    transition: background-color 0.3s, color 0.3s ;
+    position: relative ;
+}
+
+.dropdown-item:hover{
+    background-color: rgba(102, 16, 242, 0.1)!important;
+    color: #000 ;
+}
+
+.dropdown-item::after, .nav-link::after {
+    content: '' ;
+    position: absolute ;
+    left: 100% ;
+    right: 0 ;
+    bottom: 0 ;
+    height: 2px ;
+    background-color: indigo ;
+    border-radius: 8px ;
+    transition: left 0.3s ease-in-out ;
+}
+
+.dropdown-item:hover::after, .nav-link:hover::after {
+    left: 0 ;
+}
+
+.nav-link.active {
+    color: #000 ;
+}
+
+@media (min-width: 991px) {
+    .nav-link::before {
+        content: "" ;
+        position: absolute ;
+        bottom: 0 ;
+        left: 50% ;
+        transform: translateX(-50%) ;
+        width: 0;
+        height: 2px ;
+        background-color: indigo ;
+        visibility: hidden ;
+        transition: 0.3s ease-in-out ;
+    }
+
+    .nav-link.active::before {
+        width: 100% ;
+        visibility: visible ;
+    }
+}
