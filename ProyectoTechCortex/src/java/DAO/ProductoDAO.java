@@ -19,13 +19,13 @@ public class ProductoDAO implements IProductoDAO {
         Connection cnn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String sql = "SELECT p.id, p.nombre, p.descripcion, p.precio, p.stock, p.url_imagen, "
-                + "c.id AS idCategoria, c.nombre AS NombreCategoria, "
-                + "m.id AS idMarca, m.nombre AS NombreMarca, m.url_imagen AS urlImagenMarca "
-                + "FROM productos p "
-                + "INNER JOIN categorias c ON p.categoria_id = c.id "
-                + "INNER JOIN marcas m ON p.marca_id = m.id "
-                + "ORDER BY p.id; ";
+        String sql = "SELECT p.producto_id, p.producto_nom, p.producto_des, p.producto_price, p.producto_stock, p.producto_url_img, "
+                + "c.categoria_id AS idCategoria, c.categoria_nom AS NombreCategoria, "
+                + "m.marca_id AS idMarca, m.marca_nom AS NombreMarca, m.marca_url_img AS urlImagenMarca "
+                + "FROM producto p "
+                + "INNER JOIN categoria c ON p.categoria_id = c.categoria_id "
+                + "INNER JOIN marca m ON p.marca_id = m.marca_id "
+                + "ORDER BY p.producto_id; ";
         List<Producto> lista = new ArrayList<>();
         try {
             cnn = new Conexion().getConexion();
@@ -33,12 +33,12 @@ public class ProductoDAO implements IProductoDAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Producto p = new Producto(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("descripcion"),
-                        rs.getDouble("precio"),
-                        rs.getInt("stock"),
-                        rs.getString("url_imagen"),
+                        rs.getInt("producto_id"),
+                        rs.getString("producto_nom"),
+                        rs.getString("producto_des"),
+                        rs.getDouble("producto_price"),
+                        rs.getInt("producto_stock"),
+                        rs.getString("producto_url_img"),
                         new Categoria(rs.getInt("idCategoria"), rs.getString("NombreCategoria")),
                         new Marca(rs.getInt("idMarca"), rs.getString("NombreMarca"), rs.getString("urlImagenMarca"))
                 );
@@ -72,14 +72,14 @@ public class ProductoDAO implements IProductoDAO {
         Connection cnn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String sql = "SELECT p.id, p.nombre, p.descripcion, p.precio, p.stock, p.url_imagen, "
-                + "c.id AS idCategoria, c.nombre AS NombreCategoria, "
-                + "m.id AS idMarca, m.nombre AS NombreMarca, m.url_imagen AS urlImagenMarca "
-                + "FROM productos p "
-                + "INNER JOIN categorias c ON p.categoria_id = c.id "
-                + "INNER JOIN marcas m ON p.marca_id = m.id "
-                + "WHERE c.id = 1 "
-                + "ORDER BY p.id; ";
+        String sql = "SELECT p.producto_id, p.producto_nom, p.producto_des, p.producto_price, p.producto_stock, p.producto_url_img, "
+                + "c.categoria_id AS idCategoria, c.categoria_nom AS NombreCategoria, "
+                + "m.marca_id AS idMarca, m.marca_nom AS NombreMarca, m.marca_url_img AS urlImagenMarca "
+                + "FROM producto p "
+                + "INNER JOIN categoria c ON p.categoria_id = c.categoria_id "
+                + "INNER JOIN marca m ON p.marca_id = m.marca_id "
+                + "WHERE c.categoria_id = 1 "
+                + "ORDER BY p.producto_id; ";
         List<Producto> lista = new ArrayList<>();
         try {
             cnn = new Conexion().getConexion();
@@ -87,12 +87,12 @@ public class ProductoDAO implements IProductoDAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Producto p = new Producto(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("descripcion"),
-                        rs.getDouble("precio"),
-                        rs.getInt("stock"),
-                        rs.getString("url_imagen"),
+                        rs.getInt("producto_id"), 
+                        rs.getString("producto_nom"),
+                        rs.getString("producto_des"),
+                        rs.getDouble("producto_price"),
+                        rs.getInt("producto_stock"),
+                        rs.getString("producto_url_img"),
                         new Categoria(rs.getInt("idCategoria"), rs.getString("NombreCategoria")),
                         new Marca(rs.getInt("idMarca"), rs.getString("NombreMarca"), rs.getString("urlImagenMarca"))
                 );
@@ -127,13 +127,13 @@ public class ProductoDAO implements IProductoDAO {
         Connection cnn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String sql = "SELECT p.id, p.nombre, p.descripcion, p.precio, p.stock, p.url_imagen, "
-                + "c.id AS idCategoria, c.nombre AS NombreCategoria, "
-                + "m.id AS idMarca, m.nombre AS NombreMarca, m.url_imagen AS urlImagenMarca "
-                + "FROM productos p "
-                + "INNER JOIN categorias c ON p.categoria_id = c.id "
-                + "INNER JOIN marcas m ON p.marca_id = m.id "
-                + "WHERE c.id = 4 "
+        String sql = "SELECT p.producto_id, p.producto_nom, p.producto_des, p.producto_price, p.producto_stock, p.producto_url_img, "
+                + "c.categoria_id AS idCategoria, c.categoria_nom AS NombreCategoria, "
+                + "m.marca_id AS idMarca, m.marca_nom AS NombreMarca, m.marca_url_img AS urlImagenMarca "
+                + "FROM producto p "
+                + "INNER JOIN categoria c ON p.categoria_id = c.categoria_id "
+                + "INNER JOIN marca m ON p.marca_id = m.marca_id "
+                + "WHERE c.categoria_id = 4 "
                 + "ORDER BY RAND() LIMIT 8;";
 
         List<Producto> lista = new ArrayList<>();
@@ -143,12 +143,12 @@ public class ProductoDAO implements IProductoDAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Producto p = new Producto(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("descripcion"),
-                        rs.getDouble("precio"),
-                        rs.getInt("stock"),
-                        rs.getString("url_imagen"),
+                        rs.getInt("producto_id"),
+                        rs.getString("producto_nom"),
+                        rs.getString("producto_des"),
+                        rs.getDouble("producto_price"),
+                        rs.getInt("producto_stock"),
+                        rs.getString("producto_url_img"),
                         new Categoria(rs.getInt("idCategoria"), rs.getString("NombreCategoria")),
                         new Marca(rs.getInt("idMarca"), rs.getString("NombreMarca"), rs.getString("urlImagenMarca"))
                 );
@@ -183,7 +183,7 @@ public class ProductoDAO implements IProductoDAO {
         boolean resultado = false;
         Connection cnn = null;
         PreparedStatement ps = null;
-        String sql = "UPDATE productos SET nombre=?, descripcion=?, precio=?, stock=?, url_imagen=?, categoria_id=?, marca_id=? WHERE id=?";
+        String sql = "UPDATE producto SET producto_nom=?, producto_des=?, producto_price=?, producto_stock=?, producto_url_imagen=?, categoria_id=?, marca_id=? WHERE producto_id=?";
         try {
             cnn = Conexion.getConexion();
             ps = cnn.prepareStatement(sql);

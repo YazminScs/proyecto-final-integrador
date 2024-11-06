@@ -16,7 +16,7 @@ public class MarcaDAO implements IMarcaDAO {
         Connection cnn = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
-        String sql = "SELECT id, nombre, url_imagen FROM marcas;";
+        String sql = "SELECT marca_id, marca_nom, marca_url_img FROM marca;";
         List<Marca> lista = new ArrayList<>();
 
         try {
@@ -27,9 +27,9 @@ public class MarcaDAO implements IMarcaDAO {
             while (rs.next()) {
                 Marca m = new Marca();
 
-                m.setIdMarca(rs.getInt("id"));
-                m.setNombre(rs.getString("nombre"));
-                m.setUrl_imagen(rs.getString("url_imagen"));
+                m.setIdMarca(rs.getInt("marca_id"));
+                m.setNombre(rs.getString("marca_nom"));
+                m.setUrl_imagen(rs.getString("marca_url_img"));
 
                 lista.add(m);
             }
@@ -54,5 +54,4 @@ public class MarcaDAO implements IMarcaDAO {
         }
         return lista;
     }
-
 }

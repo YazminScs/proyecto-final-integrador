@@ -31,10 +31,10 @@ public class ControladorCarrusel extends HttpServlet {
             cargarTeclados(request);
             cargarMonitores(request);
             cargarMarcas(request);
-            request.getRequestDispatcher("WEB-INF/Vista/menu.jsp").forward(request, response);
+            request.getRequestDispatcher("/Vista/menu.jsp").forward(request, response);
         } else {
             request.setAttribute("mensaje", "Acción no especificada.");
-            request.getRequestDispatcher("WEB-INF/Vista/error.jsp").forward(request, response);
+            request.getRequestDispatcher("/Vista/error.jsp").forward(request, response);
         }
     }
 
