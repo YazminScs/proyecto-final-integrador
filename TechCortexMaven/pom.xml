@@ -30,12 +30,11 @@
             <version>8.0.33</version>
         </dependency>
         
-        <!-- Dependencia de H2 para pruebas en memoria -->
+        <!--DEPENDENCIA JSTL-->
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>test</scope>
-            <version>2.1.214</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
         </dependency>
         
         <!--DEPENDENCIA JBCRYPT-->
@@ -45,25 +44,26 @@
             <version>0.4</version>
         </dependency>
         
-        <!--DEPENDENCIA JSTL-->
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
-        </dependency>
-        
-        <!-- Dependencia JUnit 5 -->
+        <!-- Dependencia de JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.8.2</version>
-            <type>jar</type>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>5.8.2</version>
             <scope>test</scope>
+        </dependency>
+
+        <!-- Dependencia de H2 para base de datos en memoria -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.1.214</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- Dependencia Mockito para simular objetos -->

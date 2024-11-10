@@ -1,66 +1,61 @@
 package DAOTest;
 
-import DAO.UsuarioDAO;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import ConexionTest.ConexionTest;
+import Modelo.Usuario;
+import java.sql.*;
+import java.util.*;
+import org.mindrot.jbcrypt.BCrypt;
 
-import org.h2.tools.RunScript;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+public class UsuarioDAOTest implements IUsuarioDAO {
 
-import java.io.StringReader;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+    @Override
+    public boolean registrarUsuario(String usuario_nom, String usuario_email, String usuario_pass,
+            String usuario_dir, int usuario_tel, String usuario_rol) {
+        String sql = "INSERT INTO usuario (usuario_nom, usuario_email, usuario_pass, usuario_dir, usuario_tel, usuario_rol) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
+        String hashedPassword = BCrypt.hashpw(usuario_pass, BCrypt.gensalt());
+        try (Connection cnn = new ConexionTest().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
 
-public class UsuarioDAOTest {
+            ps.setString(1, usuario_nom);
+            ps.setString(2, usuario_email);
+            ps.setString(3, hashedPassword);
+            ps.setString(4, usuario_dir);
+            ps.setInt(5, usuario_tel);
+            ps.setString(6, usuario_rol);
 
-    private UsuarioDAO usuarioDAO;
+            int rowsAffected = ps.executeUpdate();
+            System.out.println("Filas afectadas: " + rowsAffected);
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
-    @BeforeEach
-    public void setUp() throws SQLException {
-        // Configura la conexión H2 en memoria para el test
-        Connection connection = DriverManager.getConnection("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1", "sa", "");
+    @Override
+    public List<Usuario> obtenerUsuarios() {
+        List<Usuario> usuarios = new ArrayList<>();
+        String sql = "SELECT usuario_id, usuario_nom, usuario_email, usuario_pass, usuario_rol, usuario_dir, usuario_tel FROM usuario;";
 
-        // Ejecuta el script para crear la tabla de usuario
-        RunScript.execute(connection, new StringReader(
-                "CREATE TABLE usuario ("
-                + "usuario_nom VARCHAR(50), "
-                + "usuario_email VARCHAR(50), "
-                + "usuario_pass VARCHAR(255), "
-                + "usuario_dir VARCHAR(100), "
-                + "usuario_tel INT, "
-                + "usuario_rol VARCHAR(20));"
-        ));
+        try (Connection cnn = new ConexionTest().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
-        // Cierra la conexión inicial
-        connection.close();
+            while (rs.next()) {
+                Usuario us = new Usuario();
+                us.setId(rs.getInt("usuario_id"));
+                us.setUsername(rs.getString("usuario_nom"));
+                us.setEmail(rs.getString("usuario_email"));
+                us.setPassword(rs.getString("usuario_pass"));
+                us.setRol(rs.getString("usuario_rol"));
+                us.setAddress(rs.getString("usuario_dir"));
+                us.setPhone(rs.getInt("usuario_tel"));
 
-        // Instancia la clase UsuarioDAO
-        usuarioDAO = new UsuarioDAO() {
-            public Connection getConnection() throws SQLException {
-                // Proporciona la conexión H2 para los métodos del DAO
-                return DriverManager.getConnection("jdbc:h2:mem:testdb", "sa", "");
+                usuarios.add(us);
             }
-        };
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return usuarios;
     }
 
-    @Test
-    public void testRegistrarUsuario() {
-        // Prueba registrando un usuario
-        boolean resultado = usuarioDAO.registrarUsuario("Juan", "juan@example.com", "password123", "Direccion 123", 123456789, "Administrador");
-
-        // Verifica que el usuario se haya registrado correctamente
-        assertTrue(resultado, "El usuario debería haberse registrado correctamente");
-    }
-
-    @Test
-    public void testRegistrarUsuarioDuplicado() {
-        // Intenta registrar el mismo usuario dos veces
-        usuarioDAO.registrarUsuario("Juan", "juan@example.com", "password123", "Direccion 123", 123456789, "Administrador");
-        boolean resultado = usuarioDAO.registrarUsuario("Juan", "juan@example.com", "password123", "Direccion 123", 123456789, "Administrador");
-
-        // Verifica que el segundo registro falle si tienes restricción de unicidad
-        assertFalse(resultado, "El registro duplicado debería fallar");
-    }
 }

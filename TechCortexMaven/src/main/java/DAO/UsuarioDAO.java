@@ -5,6 +5,7 @@ import Modelo.Usuario;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.mindrot.jbcrypt.BCrypt;
@@ -61,8 +62,10 @@ public class UsuarioDAO implements IUsuarioDAO {
     }
 
     @Override
-    public boolean registrarUsuario(String usuario_nom, String usuario_email, String usuario_pass, String usuario_dir, int usuario_tel, String usuario_rol) {
-        String sql = "INSERT INTO usuario (usuario_nom, usuario_email, usuario_pass, usuario_dir, usuario_tel, usuario_rol) VALUES (?, ?, ?, ?, ?, ?)";
+    public boolean registrarUsuario(String usuario_nom, String usuario_email, String usuario_pass,
+            String usuario_dir, int usuario_tel, String usuario_rol) {
+        String sql = "INSERT INTO usuario (usuario_nom, usuario_email, usuario_pass, usuario_dir, usuario_tel, usuario_rol) "
+                + "VALUES (?, ?, ?, ?, ?, ?)";
         String hashedPassword = BCrypt.hashpw(usuario_pass, BCrypt.gensalt());
         try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
 
@@ -74,8 +77,9 @@ public class UsuarioDAO implements IUsuarioDAO {
             ps.setString(6, usuario_rol);
 
             int rowsAffected = ps.executeUpdate();
+            System.out.println("Filas afectadas: " + rowsAffected); // Depuración
             return rowsAffected > 0;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
