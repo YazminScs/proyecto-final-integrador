@@ -8,4 +8,5 @@ public interface IProductoDAO {
     List<Producto> listarTeclados();
     List<Producto> listarMonitores();
     boolean actualizarProducto(Producto p);
+    Producto obtenerPorId(int id);
 }

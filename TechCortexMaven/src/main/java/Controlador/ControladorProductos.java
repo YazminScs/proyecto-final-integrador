@@ -26,6 +26,9 @@ public class ControladorProductos extends HttpServlet {
             processRequest(request, response);
             cargarDatos(request);
             request.getRequestDispatcher("vista/menu.jsp").forward(request, response);
+        } else if (accion.equals("catalogo")) {
+            cargarDatos(request);
+            request.getRequestDispatcher("Vista/catalogo.jsp").forward(request, response); // Redirigir a catalogo.jsp
         }
     }
 

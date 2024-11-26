@@ -87,7 +87,7 @@ public class ProductoDAO implements IProductoDAO {
             rs = ps.executeQuery();
             while (rs.next()) {
                 Producto p = new Producto(
-                        rs.getInt("producto_id"), 
+                        rs.getInt("producto_id"),
                         rs.getString("producto_nom"),
                         rs.getString("producto_des"),
                         rs.getDouble("producto_price"),
@@ -215,4 +215,51 @@ public class ProductoDAO implements IProductoDAO {
         }
         return resultado;
     }
+
+    @Override
+    public Producto obtenerPorId(int id) {
+        Producto producto = null;
+
+        String sql = "SELECT p.producto_id, p.producto_nom, p.producto_des, p.producto_price, p.producto_stock, p.producto_url_img, "
+                + "c.categoria_id AS categoria_id, c.categoria_nom AS categoria_nom, "
+                + "m.marca_id AS marca_id, m.marca_nom AS marca_nom "
+                + "FROM producto p "
+                + "JOIN categoria c ON p.categoria_id = c.categoria_id "
+                + "JOIN marca m ON p.marca_id = m.marca_id "
+                + "WHERE p.producto_id = ?";
+
+        try (Connection conexion = Conexion.getConexion(); PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setInt(1, id);  
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    // Crear y llenar el producto
+                    producto = new Producto();
+                    producto.setIdProducto(rs.getInt("producto_id"));
+                    producto.setNombre(rs.getString("producto_nom"));
+                    producto.setDescripcion(rs.getString("producto_des"));
+                    producto.setPrecio(rs.getDouble("producto_price"));
+                    producto.setStock(rs.getInt("producto_stock"));
+                    producto.setUrl_imagen(rs.getString("producto_url_img"));
+
+                    // Crear y llenar la categoría
+                    Categoria categoria = new Categoria();
+                    categoria.setIdCategoria(rs.getInt("categoria_id"));
+                    categoria.setNombre(rs.getString("categoria_nom"));
+                    producto.setCategorias(categoria);
+
+                    // Crear y llenar la marca
+                    Marca marca = new Marca();
+                    marca.setIdMarca(rs.getInt("marca_id"));
+                    marca.setNombre(rs.getString("marca_nom"));
+                    producto.setMarcas(marca);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+        }
+
+        return producto;
+    }
+
 }

@@ -5,6 +5,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/Assets/CSS/style-header.css?v=1.0">
     </head>
     <body>
@@ -46,31 +47,14 @@
                                 <li class="nav-item">
                                     <a class="nav-link dropdown " aria-current="page" href="<%=request.getContextPath()%>/index.jsp">HomeTech</a>
                                 </li>
-                                <li class="nav-item dropdown">
-                                    <a
-                                        class="nav-link dropdown"
-                                        href="#"
-                                        role="button"
-                                        data-bs-toggle="dropdown"
-                                        aria-expanded="false"
-                                        >
-                                        CatalogTech
-                                    </a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="dropdown-item" href="#">CatMouses</a></li>
-                                        <li><a class="dropdown-item" href="#">CatKeyboard</a></li>
-                                        <li><a class="dropdown-item" href="#">CatMonitor</a></li>
-                                    </ul>
+                                <li class="nav-item">
+                                    <a class="nav-link dropdown " aria-current="page" href="${pageContext.request.contextPath}/ControladorProductos?accion=catalogo">CatalogTech</a>
                                 </li>
                                 <li class="nav-item ">
                                     <a class="nav-link" href="<%=request.getContextPath()%>/Vista/nosotros.jsp">AboutTech</a>
                                 </li>
                                 <li class="nav-item ">
                                     <a class="nav-link" href="<%=request.getContextPath()%>/Vista/ubicaciones.jsp">LocationTech</a>
-                                </li>
-
-                                <li class="nav-item dropdown">
-                                    <a class="nav-link" href="#">Contact</a>
                                 </li>
                             </ul>
                         </div>
@@ -84,6 +68,9 @@
                         <c:choose>
                             <c:when test="${not empty sessionScope.username}">
                                 <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="<%=request.getContextPath()%>/Vista/carrito.jsp"><i class="fa fa-shopping-cart"></i></a>
+                                    </li>
                                     <li class="nav-item dropdown">
                                         <a
                                             class="nav-link dropdown"

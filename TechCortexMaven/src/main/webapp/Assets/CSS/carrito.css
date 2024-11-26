@@ -1,0 +1,141 @@
+/* Estilos personalizados */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+}
+
+.text-purple {
+    color: #6f42c1; /* Morado */
+}
+
+/* Efecto de animación para el título */
+h1 {
+    font-family: 'Arial', sans-serif;
+    font-size: 3rem;
+    color: #6f42c1;
+    animation: bounceIn 2s ease-in-out;
+}
+
+/* Animación para el título */
+@keyframes bounceIn {
+    0% { transform: translateY(-50px); opacity: 0; }
+    60% { transform: translateY(30px); opacity: 1; }
+    100% { transform: translateY(0); opacity: 1; }
+}
+
+.cart-items {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    animation: slideIn 1.5s ease-out;
+    margin-bottom: 30px;
+}
+
+/* Animación de deslizamiento para el carrito */
+@keyframes slideIn {
+    0% { transform: translateX(100%); opacity: 0; }
+    100% { transform: translateX(0); opacity: 1; }
+}
+
+.list-group-item {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    border: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    animation: fadeIn 0.5s ease-in;
+}
+
+/* Animación para los productos */
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* Estilo para el contenedor de imagen y nombre */
+.producto-info {
+    display: flex;
+    align-items: center;
+}
+
+.producto-info img {
+    width: 50px;
+    height: 50px;
+    margin-right: 15px;
+    border-radius: 5px;
+}
+
+/* Efecto de hover para los productos */
+.list-group-item:hover {
+    transform: translateX(10px);
+    background-color: #f1f1f1;
+}
+
+/* Estilo del botón de eliminar */
+.btn-remove {
+    background-color: #e83e8c;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Efecto de hover para el botón de eliminar */
+.btn-remove:hover {
+    background-color: #c13584;
+    transform: scale(1.1);
+}
+
+/* Controles de cantidad */
+.cantidad-control {
+    display: flex;
+    align-items: center;
+}
+
+.cantidad-control button {
+    background-color: #6f42c1;
+    color: white;
+    border: none;
+    padding: 8px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Efecto de hover para los botones de cantidad */
+.cantidad-control button:hover {
+    background-color: #4e2a96;
+}
+
+/* Estilo del botón de finalizar compra */
+#finalizar-compra {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Efecto de hover para finalizar compra */
+#finalizar-compra:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+#total {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #6f42c1;
+}

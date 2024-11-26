@@ -10,7 +10,7 @@
         <link href="<%=request.getContextPath()%>/Assets/CSS/style-card.css" rel="stylesheet" type="text/css"/>
         <link href="<%=request.getContextPath()%>/Assets/CSS/style-arrow-slick.css" rel="stylesheet" type="text/css"/>
     </head>
-    <body>
+    <body class="bg-body">
         <div class="container">
             <div class="slider">
                 <c:forEach var="producto" items="${listaTeclados}">
@@ -23,8 +23,8 @@
                                     <p class="card-text text-truncate" style="max-width: 400px">${producto.descripcion}</p>
                                 </div>
                                 <div class="cta-section">
-                                    <p class="card-text"><strong>Precio:</strong> ${producto.precio}</p>
-                                    <a href="#" class="btn btn-light">Comprar</a>
+                                    <p class="card-text"><strong>Precio: S/</strong> ${producto.precio}</p>
+                                    <a href="${pageContext.request.contextPath}/ControladorDetalle?idProducto=${producto.idProducto}" class="btn btn-light">Comprar</a>                               
                                 </div>
                             </div>
                         </div>
