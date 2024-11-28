@@ -73,6 +73,13 @@
             <version>4.5.1</version>
             <type>jar</type>
         </dependency>
+        
+        <!-- Dependencia Selenium - Mantenimiento -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>4.27.0</version>
+        </dependency>
     </dependencies>
     
     <build>
