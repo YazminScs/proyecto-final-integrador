@@ -1,0 +1,87 @@
+.profile-card {
+    background-color: #fff !important; /* Color ajustado */
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    transform: scale(0.9);
+    transition: transform 0.6s ease, box-shadow 0.6s ease;
+}
+
+.profile-card:hover {
+    transform: scale(1);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+}
+
+.profile-header {
+    background: #9D79AE !important; /* Color ajustado */
+    padding: 20px !important;
+    text-align: center;
+    position: relative;
+}
+
+.profile-header h2 {
+    font-size: 1.8rem;
+    margin-top: 15px;
+}
+
+.profile-header p {
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+@keyframes zoomBounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.profile-content {
+    padding: 20px !important;
+}
+
+.list-group-item {
+    background: transparent !important;
+    border: none !important;
+    color: black !important;
+    font-size: 1.1rem !important;
+    position: relative !important;
+    padding-left: 35px !important;
+}
+
+.list-group-item::before {
+    content: "•" !important;
+    position: absolute !important;
+    left: 10px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+    font-size: 1.5rem !important;
+    color: #7F5B91 !important; /* Color ajustado */
+    animation: pulseDot 2s infinite !important;
+}
+
+@keyframes pulseDot {
+    0%, 100% {
+        transform: translateY(-50%) scale(1);
+    }
+    50% {
+        transform: translateY(-50%) scale(1.3);
+    }
+}
+
+.btn-purple {
+    background-color: #9D79AE !important; /* Color ajustado */
+    border: none !important;
+    color: #fff !important;
+    padding: 10px 20px !important;
+    font-size: 1.1rem !important;
+    transition: all 0.3s ease-in-out !important;
+}
+
+.btn-purple:hover {
+    background-color: #7F5B91 !important; /* Color ajustado */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+    transform: translateY(-5px);
+}

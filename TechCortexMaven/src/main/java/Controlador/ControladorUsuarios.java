@@ -1,7 +1,13 @@
 package Controlador;
 
+import DAO.CarritoDAO;
 import DAO.UsuarioDAO;
+import Modelo.Carrito;
+import Modelo.Usuario;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,11 +31,19 @@ public class ControladorUsuarios extends HttpServlet {
         String accion = request.getParameter("accion");
 
         if ("logout".equals(accion)) {
-            HttpSession session = request.getSession(false); 
+            HttpSession session = request.getSession(false);
             if (session != null) {
-                session.invalidate();  
+                session.invalidate();
             }
-            response.sendRedirect("Vista/login.jsp"); 
+            response.sendRedirect("Vista/login.jsp");
+        } else if ("perfil".equals(accion)) {
+            UsuarioDAO usuarioDAO= new UsuarioDAO();
+            HttpSession session = request.getSession();
+            String username = (String) session.getAttribute("username");
+            Usuario usuario=usuarioDAO.obtenerUsuarioPorId(usuarioDAO.obtenerIdPorNombreUsuario(username));
+            
+            request.setAttribute("usuario", usuario);
+            request.getRequestDispatcher("Vista/perfil.jsp").forward(request, response);
         }
 
     }

@@ -1,4 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -8,7 +9,7 @@
     </head>
     <body class="bg-body">
         <%@include file="header.jsp" %>
-        
+
         <div class="container py-5">
             <h1 class="text-center text-purple mb-5 title-animation">
                 Proceso de Compra
@@ -22,49 +23,26 @@
                         </div>
                         <div class="card-body">
                             <ul class="list-group">
-                                <!-- Producto 1 -->
-                                <li class="list-group-item d-flex align-items-center">
-                                    <img
-                                        src="https://via.placeholder.com/50"
-                                        alt="Producto 1"
-                                        class="img-fluid rounded me-3"
-                                        />
-                                    <div class="d-flex flex-column w-100">
-                                        <span>Producto 1</span>
-                                        <small class="text-muted">Cantidad: 2</small>
-                                    </div>
-                                    <span>$40.00</span>
-                                </li>
-                                <!-- Producto 2 -->
-                                <li class="list-group-item d-flex align-items-center">
-                                    <img
-                                        src="https://via.placeholder.com/50"
-                                        alt="Producto 2"
-                                        class="img-fluid rounded me-3"
-                                        />
-                                    <div class="d-flex flex-column w-100">
-                                        <span>Producto 2</span>
-                                        <small class="text-muted">Cantidad: 1</small>
-                                    </div>
-                                    <span>$15.00</span>
-                                </li>
-                                <!-- Producto 3 -->
-                                <li class="list-group-item d-flex align-items-center">
-                                    <img
-                                        src="https://via.placeholder.com/50"
-                                        alt="Producto 3"
-                                        class="img-fluid rounded me-3"
-                                        />
-                                    <div class="d-flex flex-column w-100">
-                                        <span>Producto 3</span>
-                                        <small class="text-muted">Cantidad: 3</small>
-                                    </div>
-                                    <span>$30.00</span>
-                                </li>
+                                <c:forEach var="detalle" items="${miDetalle}">
+                                    <li class="list-group-item d-flex align-items-center">
+                                        <img
+                                            src="${detalle.producto.url_imagen}"
+                                            alt="${detalle.producto.nombre}"
+                                            class="img-fluid rounded me-3"
+                                            style="width: 50px !important;"
+                                            />
+                                        <div class="d-flex flex-column w-100">
+                                            <span>${detalle.producto.nombre}</span>
+                                            <small class="text-muted">Cantidad: ${detalle.detalle_cant}</small>
+                                        </div>
+                                        <c:set var="precio_tot" value="${detalle.detalle_price * detalle.detalle_cant}" />
+                                        <span>S/<fmt:formatNumber value="${precio_tot}" type="number" maxFractionDigits="2" minFractionDigits="2" /></span>
+                                    </li>
+                                </c:forEach>
                             </ul>
                             <div class="d-flex justify-content-between mt-3 total-animation">
                                 <h5>Total:</h5>
-                                <h5 class="text-purple">$85.00</h5>
+                                <h5 class="text-purple">S/${total}</h5>
                             </div>
                         </div>
                     </div>
@@ -78,13 +56,13 @@
                         <div class="card-body">
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item">
-                                    <strong>Nombre:</strong> Juan Pérez
+                                    <strong>Nombre:</strong> ${usuario.username}
                                 </li>
                                 <li class="list-group-item">
-                                    <strong>Dirección:</strong> Calle Falsa 123, Ciudad Ejemplo
+                                    <strong>Dirección:</strong> ${usuario.address}
                                 </li>
                                 <li class="list-group-item">
-                                    <strong>Correo:</strong> juan.perez@example.com
+                                    <strong>Correo:</strong> ${usuario.email}
                                 </li>
                             </ul>
                         </div>
@@ -195,17 +173,19 @@
                 </div>
             </div>
             <div class="text-center mt-4">
-                <button class="btn btn-purple btn-lg px-5 pulse-animation">
-                    Confirmar Compra
-                </button>
+                <a 
+                    style="text-decoration: none !important;" 
+                    class="btn btn-purple btn-lg px-5 pulse-animation" 
+                    href="<%=request.getContextPath()%>/ControladorCompra?accion=finalizarCompra&pago_id=" 
+                    id="finalizarCompraLink">
+                    Finalizar Compra
+                </a>
             </div>
         </div>
-        
-         <%@include file="footer.jsp" %>
 
-        <!-- JavaScript -->
+        <%@include file="footer.jsp" %>
+
         <script>
-            // Mostrar/ocultar campos de tarjeta dependiendo del método de pago seleccionado
             const tarjetaInfo = document.getElementById("tarjetaInfo");
             document.getElementById("efectivo").addEventListener("change", () => {
                 tarjetaInfo.classList.add("d-none");
@@ -255,7 +235,32 @@
                     return;
                 }
 
+                // Mostrar mensaje de éxito
                 alert("Formulario enviado correctamente.");
+
+                // Limpiar los campos
+                document.getElementById("input-name").value = "";
+                document.getElementById("input-number").value = "";
+                document.getElementById("input-month").value = "";
+                document.getElementById("input-year").value = "";
+                document.getElementById("input-cvc").value = "";
+            });
+
+
+            function actualizarEnlacePago() {
+                var metodoPago = document.querySelector('input[name="metodoPago"]:checked').value;
+                var pagoId = (metodoPago === 'efectivo') ? 1 : 2;
+
+                var enlace = document.getElementById('finalizarCompraLink');
+                enlace.href = "<%=request.getContextPath()%>/ControladorCompra?accion=finalizarCompra&pago_id=" + pagoId;
+            }
+
+            document.addEventListener('DOMContentLoaded', function () {
+                actualizarEnlacePago();
+            });
+
+            document.querySelectorAll('input[name="metodoPago"]').forEach(function (radio) {
+                radio.addEventListener('change', actualizarEnlacePago);
             });
         </script>
         <!-- Bootstrap JS -->

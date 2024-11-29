@@ -17,4 +17,8 @@ public interface IUsuarioDAO {
      boolean existeEmailUsuario(String usuario_email);
      
      String obtenerRol(String usuario_nom);
+     
+     int obtenerIdPorNombreUsuario(String usuario_nom);
+     
+     Usuario obtenerUsuarioPorId(int usuario_id);
 }

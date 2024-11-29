@@ -41,17 +41,53 @@
 
                     <!-- Botones de acción -->
                     <div class="action-buttons">
-                        <button class="btn btn-buy" onclick="addToCart()">Agregar al Carrito</button>
+                        <a class="btn btn-buy" href="javascript:void(0);" data-id="${producto.idProducto}" onclick="agregarAlCarritoDesdeElemento(this)">Agregar al Carrito</a>
                     </div>
                 </div>
             </div>
         </div>
+        <div id="notification" class="notification"></div>
+
 
         <%@include file="footer.jsp" %>
 
         <!-- Bootstrap Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         <!-- JavaScript Personalizado -->
-        <script src="${pageContext.request.contextPath}/Assets/JS/producto-detalle.js"></script>
+        <script>
+                            function showNotification(message) {
+                                const notification = document.getElementById('notification');
+                                notification.textContent = message;
+                                notification.classList.add('visible');
+
+                                setTimeout(() => {
+                                    notification.classList.remove('visible');
+                                }, 3000);
+                            }
+
+                            function agregarAlCarritoDesdeElemento(elemento) {
+                                const idProducto = elemento.getAttribute('data-id');
+                                agregarAlCarrito(idProducto);
+                            }
+
+                            function agregarAlCarrito(idProducto) {
+                                fetch(`/TechCortexMaven/ControladorCarrito?idProducto=` + idProducto, {
+                                    method: 'GET'
+                                })
+                                        .then(response => {
+                                            if (response.ok) {
+                                                return response.text();
+                                            } else {
+                                                throw new Error('No se pudo agregar el producto al carrito.');
+                                            }
+                                        })
+                                        .then(mensaje => {
+                                            showNotification(mensaje);
+                                        })
+                                        .catch(error => {
+                                            showNotification('Error: ' + error.message);
+                                        });
+                            }
+        </script>
     </body>
 </html>

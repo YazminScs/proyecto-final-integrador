@@ -69,20 +69,22 @@
                             <c:when test="${not empty sessionScope.username}">
                                 <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="<%=request.getContextPath()%>/Vista/carrito.jsp"><i class="fa fa-shopping-cart"></i></a>
+                                        <a class="nav-link" href="${pageContext.request.contextPath}/ControladorCarrito?accion=carrito">
+                                            <i class="fa fa-shopping-cart"></i>
+                                        </a>                                    
                                     </li>
                                     <li class="nav-item dropdown">
                                         <a
-                                            class="nav-link dropdown"
-                                            href="#"
-                                            role="button"
-                                            data-bs-toggle="dropdown"
+                                            class="nav-link dropdown" 
+                                            role="button" 
+                                            data-bs-toggle="dropdown" 
                                             aria-expanded="false"
                                             >
                                             Bienvenido, <%= session.getAttribute("username") != null ? session.getAttribute("username") : "Usuario"%>
                                         </a>
                                         <ul class="dropdown-menu dropdown-menu-right">
-                                            <li><a class="dropdown-item" href="#">Perfil</a></li>
+                                            <li><a class="dropdown-item" href="<%=request.getContextPath()%>/ControladorUsuarios?accion=perfil">Perfil</a></li>
+                                            <li><a class="dropdown-item" href="<%=request.getContextPath()%>/Vista/mis-compras.jsp">Mis compras</a></li>
                                             <li><a class="dropdown-item" href="<%=request.getContextPath()%>/ControladorUsuarios?accion=logout">Cerrar sesión</a></li>
                                         </ul>
                                     </li>

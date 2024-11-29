@@ -143,4 +143,49 @@ public class UsuarioDAO implements IUsuarioDAO {
         }
         return rol;
     }
+
+    @Override
+    public int obtenerIdPorNombreUsuario(String usuario_nom) {
+        int usuario_id = 0;
+        String sql = "SELECT usuario_id FROM usuario WHERE usuario_nom = ?";
+        try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ps.setString(1, usuario_nom);
+            ResultSet resultSet = ps.executeQuery();
+
+            if (resultSet.next()) {
+                usuario_id = resultSet.getInt("usuario_id");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return usuario_id;
+    }
+
+    @Override
+    public Usuario obtenerUsuarioPorId(int usuario_id) {
+        Usuario usuario = null; 
+        String sql = "SELECT * FROM usuario WHERE usuario_id = ?";
+
+        try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            ps.setInt(1, usuario_id); 
+            ResultSet resultSet = ps.executeQuery();  
+
+            if (resultSet.next()) {
+                String usuario_nom = resultSet.getString("usuario_nom");
+                String usuario_email = resultSet.getString("usuario_email");
+                String usuario_pass = resultSet.getString("usuario_pass");
+                String usuario_rol = resultSet.getString("usuario_rol");
+                String usuario_dir = resultSet.getString("usuario_dir");
+                int usuario_tel = resultSet.getInt("usuario_tel");
+
+                usuario = new Usuario(usuario_id, usuario_nom, usuario_email, usuario_pass, usuario_dir, usuario_tel, usuario_rol);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return usuario;
+    }
 }
