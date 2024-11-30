@@ -58,6 +58,8 @@ public class ControladorUsuarios extends HttpServlet {
             registrarUsuario(request, response);
         } else if ("login".equals(action)) {
             iniciarSesion(request, response);
+        }else if("edit".equals(action)){
+            
         }
     }
 
