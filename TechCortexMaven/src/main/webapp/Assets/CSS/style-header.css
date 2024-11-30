@@ -67,26 +67,27 @@ background: url(https://media.istockphoto.com/id/1303182525/es/foto/fondo-abstra
 .nav-link {
     color: #666777;
     font-weight: 500;
-    font-size: 1.2rem!important;
+    font-size: 1.2rem !important;
     position: relative;
     transition: color 0.5s;
 }
 
 .nav-link:hover,
-.nav-link.active {
+.link.active {
     font-weight: bolder;
     color: #000;
     text-shadow: whitesmoke 0.2px 0.2px;
 }
 
-.dropdown-menu {
+/*.dropdown-menu {
     background-color: #fff ;
     border-radius: 5px ;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9) ;
     padding: 5px ;
     margin-left: 10px ;
     transition: all 0.5s ease-out;
-}
+    min-width: 200px;
+}*/
 
 .dropdown-item, .nav-link {
     color: #666777 ;
@@ -140,4 +141,24 @@ background: url(https://media.istockphoto.com/id/1303182525/es/foto/fondo-abstra
         width: 100% ;
         visibility: visible ;
     }
+}
+
+/* Mostrar el dropdown-menu cuando el cursor pase sobre el elemento .dropdown */
+.dropdown:hover .dropdown-menu {
+    display: block;
+    position: absolute; /* Para que el menú se posicione correctamente */
+    top: 100%; /* Aparece debajo del botón */
+    left: 0;
+    z-index: 1000; /* Asegura que el menú esté sobre otros elementos */
+}
+
+/* Ocultar el menú por defecto */
+.dropdown-menu {
+    display: none; /* Oculta el menú inicialmente */
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9);
+    padding: 5px;
+    margin-left: 10px;
+    transition: all 0.5s ease-out;
 }
