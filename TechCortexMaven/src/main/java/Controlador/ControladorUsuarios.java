@@ -37,11 +37,11 @@ public class ControladorUsuarios extends HttpServlet {
             }
             response.sendRedirect("Vista/login.jsp");
         } else if ("perfil".equals(accion)) {
-            UsuarioDAO usuarioDAO= new UsuarioDAO();
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
             HttpSession session = request.getSession();
             String username = (String) session.getAttribute("username");
-            Usuario usuario=usuarioDAO.obtenerUsuarioPorId(usuarioDAO.obtenerIdPorNombreUsuario(username));
-            
+            Usuario usuario = usuarioDAO.obtenerUsuarioPorId(usuarioDAO.obtenerIdPorNombreUsuario(username));
+
             request.setAttribute("usuario", usuario);
             request.getRequestDispatcher("Vista/perfil.jsp").forward(request, response);
         }
@@ -58,8 +58,8 @@ public class ControladorUsuarios extends HttpServlet {
             registrarUsuario(request, response);
         } else if ("login".equals(action)) {
             iniciarSesion(request, response);
-        }else if("edit".equals(action)){
-            
+        } else if ("edit".equals(action)) {
+            editarSesion(request, response);
         }
     }
 
@@ -120,6 +120,63 @@ public class ControladorUsuarios extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("error", "Nombre de usuario o contraseña incorrectos.");
             response.sendRedirect("Vista/login.jsp");
+        }
+    }
+
+    private void editarSesion(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession session = request.getSession();
+        String usernameSesion = (String) session.getAttribute("usuario");
+
+        if (usernameSesion == null) {
+            session.setAttribute("error", "Debes iniciar sesión para editar tu perfil.");
+            response.sendRedirect("Vista/login.jsp");
+            return;
+        }
+
+        String username = request.getParameter("username");
+        String email = request.getParameter("email");
+        String address = request.getParameter("address");
+        int phone = Integer.parseInt(request.getParameter("phone"));
+
+        UsuarioDAO userDAO = new UsuarioDAO();
+        Usuario usuario = new Usuario();
+
+        usuario.setUsername(username);
+        usuario.setEmail(email);
+        usuario.setAddress(address);
+        usuario.setPhone(phone);
+
+        Usuario usuarioActual = userDAO.obtenerUsuarioPorUsername(usernameSesion);
+
+        usuario.setRol(usuarioActual.getRol());
+        usuario.setId(usuarioActual.getId());
+
+        mostrarUsuarioEnConsola(usuario);
+
+        boolean actualizado = userDAO.actualizarUsuario(usuario);
+
+        if (actualizado) {
+            session.setAttribute("usuario", usuario);
+            session.setAttribute("message", "Perfil actualizado exitosamente.");
+            response.sendRedirect("Vista/perfil.jsp");
+        } else {
+            session.setAttribute("error", "No se pudo actualizar el perfil. Inténtalo nuevamente.");
+            response.sendRedirect("Vista/perfil.jsp");
+        }
+    }
+
+    private void mostrarUsuarioEnConsola(Usuario usuario) {
+        if (usuario != null) {
+            System.out.println("----- Detalles del Usuario -----");
+            System.out.println("ID: " + usuario.getId());
+            System.out.println("Username: " + usuario.getUsername());
+            System.out.println("Email: " + usuario.getEmail());
+            System.out.println("Dirección: " + usuario.getAddress());
+            System.out.println("Teléfono: " + usuario.getPhone());
+            System.out.println("Rol: " + usuario.getRol());
+            System.out.println("--------------------------------");
+        } else {
+            System.out.println("El usuario es nulo. No hay información para mostrar.");
         }
     }
 
