@@ -6,12 +6,12 @@ import DAO.MetodoPagoDAO;
 import DAO.OrdenDAO;
 import DAO.ProductoDAO;
 import DAO.UsuarioDAO;
-import Modelo.Carrito;
 import Modelo.DetalleCarrito;
-import Modelo.Orden;
+import Modelo.Producto;
 import Modelo.Usuario;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -84,6 +84,22 @@ public class ControladorCompra extends HttpServlet {
             boolean actualizado = carritoDAO.actualizarCarrito(total, carrito_id);
 
             boolean registrado = ordenDAO.registrarOrden(carritoDAO.obtenerCarritoPorId(carrito_id), metodoPagoDAO.obtenerPagoPorId(pago_id), "Pendiente");
+
+            //ACTUALIZAR STOCK PRECIO:
+            for (DetalleCarrito detalle : miDetalle) {
+                Producto producto = detalle.getProducto();
+                int cantidad = detalle.getDetalle_cant();
+
+                int stockActual = producto.getStock();
+                
+                int nuevoStock=stockActual-cantidad;
+                
+                productoDAO.actualizarStock(nuevoStock, producto.getIdProducto());
+            }
+
+            //VOLVER A CREAR UN CARRITO:
+            carritoDAO.registrarCarrito(usuario);
+
             request.setAttribute("total", totalFormateado);
             request.setAttribute("miDetalle", miDetalle);
             request.getRequestDispatcher("Vista/final-compra.jsp").forward(request, response);

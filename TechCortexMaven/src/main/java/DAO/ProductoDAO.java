@@ -229,7 +229,7 @@ public class ProductoDAO implements IProductoDAO {
                 + "WHERE p.producto_id = ?";
 
         try (Connection conexion = Conexion.getConexion(); PreparedStatement ps = conexion.prepareStatement(sql)) {
-            ps.setInt(1, id);  
+            ps.setInt(1, id);
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -256,10 +256,27 @@ public class ProductoDAO implements IProductoDAO {
                 }
             }
         } catch (SQLException e) {
-            e.printStackTrace(); 
+            e.printStackTrace();
         }
 
         return producto;
+    }
+
+    @Override
+    public boolean actualizarStock(int producto_stock, int producto_id) {
+        String sql = "UPDATE producto SET producto_stock = ? WHERE producto_id = ?";
+        try (Connection conexion = Conexion.getConexion(); PreparedStatement ps = conexion.prepareStatement(sql)) {
+            ps.setInt(1, producto_stock);
+            ps.setInt(2, producto_id);
+
+            int filasAfectadas = ps.executeUpdate();
+
+            return filasAfectadas > 0;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; 
+        }
     }
 
 }

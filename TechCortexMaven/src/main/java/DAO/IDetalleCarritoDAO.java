@@ -17,4 +17,6 @@ public interface IDetalleCarritoDAO {
     boolean eliminarProducto(Carrito carrito, Producto producto);
     
     double obtenerTotalPorId(int carrito_id);
+    
+    boolean eliminarDetallePorId(int carrito_id);
 }

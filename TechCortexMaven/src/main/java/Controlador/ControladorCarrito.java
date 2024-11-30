@@ -4,16 +4,12 @@ import DAO.CarritoDAO;
 import DAO.DetalleCarritoDAO;
 import DAO.ProductoDAO;
 import DAO.UsuarioDAO;
-import Modelo.Carrito;
 import Modelo.DetalleCarrito;
 import Modelo.Producto;
 import Modelo.Usuario;
 import java.util.List;
 import java.text.DecimalFormat;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.sql.Timestamp;
-import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -73,9 +69,6 @@ public class ControladorCarrito extends HttpServlet {
 
         int idProducto = Integer.parseInt(request.getParameter("idProducto"));
         Producto producto = productoDAO.obtenerPorId(idProducto);
-        Date fechaActual = new Date();
-        java.sql.Date sqlDate = new java.sql.Date(fechaActual.getTime());
-        boolean creado = carritoDAO.registrarCarrito(sqlDate, usuarioDAO.obtenerUsuarioPorId(usuarioDAO.obtenerIdPorNombreUsuario(username)));
         int carrito_id = carritoDAO.obtenerUltimoIdCarritoPorUsuario(usuarioDAO.obtenerUsuarioPorId(usuarioDAO.obtenerIdPorNombreUsuario(username)));
         boolean detalle_creado = detalleCarritoDAO.registrarDetalleCarrito(1, producto.getPrecio(), carritoDAO.obtenerCarritoPorId(carrito_id), producto);
         if (detalle_creado) {

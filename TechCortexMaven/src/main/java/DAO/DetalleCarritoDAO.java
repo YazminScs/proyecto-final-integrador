@@ -137,7 +137,7 @@ public class DetalleCarritoDAO implements IDetalleCarritoDAO {
 
     @Override
     public double obtenerTotalPorId(int carrito_id) {
-        String sql = "SELECT SUM(detalle_price * detalle_cant) FROM detalle_carrito WHERE carrido_id = ?";
+        String sql = "SELECT SUM(detalle_price * detalle_cant) FROM detalle_carrito WHERE carrito_id = ?";
         double total = 0.0;
 
         try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
@@ -145,7 +145,7 @@ public class DetalleCarritoDAO implements IDetalleCarritoDAO {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    total = rs.getDouble(1); 
+                    total = rs.getDouble(1);
                 }
             }
 
@@ -154,5 +154,21 @@ public class DetalleCarritoDAO implements IDetalleCarritoDAO {
         }
 
         return total;
+    }
+
+    @Override
+    public boolean eliminarDetallePorId(int carrito_id) {
+        String sql = "DELETE FROM detalle_carrito WHERE carrito_id = ?";
+
+        try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
+            ps.setInt(1, carrito_id);
+            
+            int filasAfectadas = ps.executeUpdate();
+
+            return filasAfectadas > 0;
+        } catch(SQLException e){
+            e.printStackTrace();
+            return false;
+        }
     }
 }

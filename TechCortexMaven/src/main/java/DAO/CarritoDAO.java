@@ -8,18 +8,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
-import org.mindrot.jbcrypt.BCrypt;
 
 public class CarritoDAO implements ICarritoDAO {
-
+    DetalleCarritoDAO detalleDAO= new DetalleCarritoDAO();
+    
     @Override
-    public boolean registrarCarrito(Date carrito_fecha, Usuario usuario) {
+    public boolean registrarCarrito(Usuario usuario) {
         int usuario_id = usuario.getId();
-        String sql = "INSERT INTO carrito (carrito_fecha, usuario_id) "
-                + "VALUES (?, ?)";
+        String sql = "INSERT INTO carrito (usuario_id) "
+                + "VALUES (?)";
         try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
-            ps.setDate(1, (java.sql.Date) carrito_fecha);
-            ps.setInt(2, usuario_id);
+            ps.setInt(1, usuario_id);
 
             int rowsAffected = ps.executeUpdate();
             System.out.println("Filas afectadas: " + rowsAffected);
@@ -87,6 +86,23 @@ public class CarritoDAO implements ICarritoDAO {
             ps.setDouble(1, carrito_total);
             ps.setInt(2, carrito_id);
 
+            int filasAfectadas = ps.executeUpdate();
+
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean eliminarCarritoPorId(int carrito_id) {
+        String sql = "DELETE FROM carrito WHERE carrito_id = ?";
+        try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
+            ps.setInt(1, carrito_id);
+            
+            detalleDAO.eliminarDetallePorId(carrito_id);
+            
             int filasAfectadas = ps.executeUpdate();
 
             return filasAfectadas > 0;
