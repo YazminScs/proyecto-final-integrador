@@ -11,7 +11,6 @@ import Modelo.Producto;
 import Modelo.Usuario;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -100,6 +99,7 @@ public class ControladorCompra extends HttpServlet {
             //VOLVER A CREAR UN CARRITO:
             carritoDAO.registrarCarrito(usuario);
 
+            request.setAttribute("carrito_id", carrito_id);
             request.setAttribute("total", totalFormateado);
             request.setAttribute("miDetalle", miDetalle);
             request.getRequestDispatcher("Vista/final-compra.jsp").forward(request, response);

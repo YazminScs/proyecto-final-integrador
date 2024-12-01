@@ -4,7 +4,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Gracias por tu compra ||TechCortex</title>
+        <title>Gracias por tu compra || TechCortex</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
         <link href="<%=request.getContextPath()%>/Assets/CSS/final-compra.css" rel="stylesheet" type="text/css"/>
     </head>
@@ -47,7 +47,9 @@
             </div>
 
             <div class="animation-container">
-                <button class="btn-purple">Descargar PDF</button>
+                <a href="${pageContext.request.contextPath}/ControladorReporte?carrito_id=${carrito_id}" class="btn-purple" style="text-decoration: none !important;">
+                    Descargar PDF
+                </a>
             </div>
         </div>
 

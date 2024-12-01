@@ -1,82 +1,162 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
-<html>
+<html lang="es">
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Mis ordenes || TechCortex</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="<%=request.getContextPath()%>/Assets/CSS/mis-compras.css" rel="stylesheet" type="text/css"/>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Mis Compras || TechCortex</title>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Font Awesome for icons -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <!-- Estilos personalizados -->
+        <style>
+            .container {
+                margin-top: 50px;
+            }
+
+            h1 {
+                text-align: center;
+                color: #007bff;
+                font-size: 3rem;
+                margin-bottom: 40px;
+            }
+
+            .card {
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                margin-bottom: 30px;
+                background-color: #fff;
+                overflow: hidden;
+                transition: transform 0.3s ease;
+            }
+
+            .card:hover {
+                transform: translateY(-10px);
+            }
+
+            .card-header {
+                background-color: #007bff;
+                color: white;
+                padding: 20px;
+                font-size: 1.5rem;
+            }
+
+            .card-body {
+                padding: 30px;
+                background-color: #f8f9fa;
+                border-radius: 0 0 10px 10px;
+            }
+
+            .btn-info {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                padding: 12px 20px;
+                font-size: 1.1rem;
+                cursor: pointer;
+                transition: background-color 0.3s ease;
+            }
+
+            .btn-info:hover {
+                background-color: #0056b3;
+            }
+
+            .btn-collapse {
+                background-color: transparent;
+                border: none;
+                color: #007bff;
+                font-size: 1.2rem;
+                padding: 10px 15px;
+                cursor: pointer;
+                transition: color 0.3s ease;
+            }
+
+            .btn-collapse:hover {
+                color: #0056b3;
+            }
+
+            .collapse-icon {
+                margin-left: 10px;
+                font-size: 1.3rem;
+            }
+
+            .no-compras {
+                text-align: center;
+                font-size: 1.5rem;
+                color: #007bff;
+                margin-top: 50px;
+                font-weight: 600;
+            }
+        </style>
     </head>
     <body class="bg-body">
         <%@include file="header.jsp" %>
         
         <div class="container">
-            <h1 class="text-center mb-5" style="color: #512DA8;">Mis Ã“rdenes</h1>
+            <c:if test="${not empty carritoInfo}">
+                <c:forEach var="info" items="${carritoInfo}">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>Carrito ID: ${info.carrito.carrito_id}</h4>
+                        </div>
 
-            <!-- Order Card 1 -->
-            <div class="order-card">
-                <div class="order-header">
-                    <h5>Orden #12345</h5>
-                    <span class="status completed">Completado</span>
-                </div>
-                <p><strong>Fecha:</strong> 25 de Noviembre, 2024</p>
-                <p><strong>Total:</strong> $120.00</p>
-                <div class="d-flex justify-content-end">
-                    <button class="btn-view" data-bs-toggle="modal" data-bs-target="#orderDetailsModal" 
-                            onclick="loadOrderDetails('Orden #12345', '25 de Noviembre, 2024', '$120.00', 'Producto A x2, Producto B x1')">
-                        Ver Detalles
-                    </button>
-                </div>
-            </div>
+                        <div class="card-body">
+                            <p><strong>Orden ID:</strong> ${info.orden.orden_id}</p>
+                            <p><strong>Fecha de Orden:</strong> ${info.carrito.carrito_fecha}</p>
+                            <p><strong>Estado de la Orden:</strong> ${info.orden.orden_estado}</p>
+                            <p><strong>Total:</strong> $${info.carrito.carrito_total}</p>
 
-            <!-- Order Card 2 -->
-            <div class="order-card">
-                <div class="order-header">
-                    <h5>Orden #12344</h5>
-                    <span class="status pending">Pendiente</span>
-                </div>
-                <p><strong>Fecha:</strong> 24 de Noviembre, 2024</p>
-                <p><strong>Total:</strong> $85.50</p>
-                <div class="d-flex justify-content-end">
-                    <button class="btn-view" data-bs-toggle="modal" data-bs-target="#orderDetailsModal" 
-                            onclick="loadOrderDetails('Orden #12344', '24 de Noviembre, 2024', '$85.50', 'Producto C x1, Producto D x3')">
-                        Ver Detalles
-                    </button>
-                </div>
-            </div>
+                            <!-- Botón para desplegar detalles -->
+                            <button class="btn-collapse" type="button" data-bs-toggle="collapse" data-bs-target="#detallesCarrito${info.carrito.carrito_id}" aria-expanded="false" aria-controls="detallesCarrito${info.carrito.carrito_id}">
+                                <i class="fas fa-chevron-down collapse-icon"></i> Ver Detalles
+                            </button>
+
+                            <!-- Detalles del carrito -->
+                            <div class="collapse" id="detallesCarrito${info.carrito.carrito_id}">
+                                <h5>Detalles del Carrito:</h5>
+                                <ul>
+                                    <c:forEach var="detalle" items="${info.detalles}">
+                                        <li>
+                                            <strong>Producto:</strong> ${detalle.producto.nombre} <br>
+                                            <strong>Cantidad:</strong> ${detalle.detalle_cant} <br>
+                                            <strong>Precio:</strong> $${detalle.detalle_price} <br>
+                                            <strong>Subtotal:</strong> $${detalle.detalle_cant * detalle.detalle_price}
+                                        </li>
+                                    </c:forEach>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </c:forEach>
+            </c:if>
+
+            <c:if test="${empty carritoInfo}">
+                <p class="no-compras">No tienes compras recientes.</p>
+            </c:if>
         </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="orderDetailsModalLabel">Detalles de la Orden</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p><strong>ID Orden:</strong> <span id="modalOrderId"></span></p>
-                        <p><strong>Fecha:</strong> <span id="modalOrderDate"></span></p>
-                        <p><strong>Total:</strong> <span id="modalOrderTotal"></span></p>
-                        <p><strong>Productos:</strong> <span id="modalOrderProducts"></span></p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 
-        <%@include file="footer.jsp" %>
-        <!-- Bootstrap JS -->
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
         <script>
-        function loadOrderDetails(orderId, orderDate, orderTotal, orderProducts) {
-            document.getElementById('modalOrderId').textContent = orderId;
-            document.getElementById('modalOrderDate').textContent = orderDate;
-            document.getElementById('modalOrderTotal').textContent = orderTotal;
-            document.getElementById('modalOrderProducts').textContent = orderProducts;
-        }
-    </script>
+            document.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function (button) {
+                button.addEventListener('click', function () {
+                    var icon = this.querySelector('.collapse-icon');
+                    var target = document.querySelector(this.getAttribute('data-bs-target'));
+
+                    if (target.classList.contains('show')) {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    } else {
+                        icon.classList.remove('fa-chevron-down');
+                        icon.classList.add('fa-chevron-up');
+                    }
+                });
+            });
+        </script>
+        
+        <%@include file="footer.jsp" %>
     </body>
 </html>

@@ -5,8 +5,15 @@ import java.util.List;
 
 public interface IUsuarioDAO {
 
-    boolean registrarUsuario(String usuario_nom, String usuario_email, String usuario_pass, String usuario_dir, int usuario_tel, String usuario_rol);
+    boolean registrarUsuario(Usuario usuario);
 
     public List<Usuario> obtenerUsuarios();
     
+    Usuario buscarUsuarioPorId(int usuario_id);
+    
+    boolean actualizarUsuario(Usuario usuario);
+    
+    boolean eliminarUsuario(int usuario_id);
+    
+    List<Usuario> obtenerUsuariosPorRol(String usuario_rol);
 }

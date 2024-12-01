@@ -1,6 +1,6 @@
 
 .bg-body {
-background: url(https://media.istockphoto.com/id/1303182525/es/foto/fondo-abstracto-blanco-azul-claro-degradado-de-color-p%C3%BArpura-desenfocado.jpg?s=612x612&w=0&k=20&c=cWDzgcPOCGDqzmMS0tOOpri65oN7BMVDWQPmAKFEPxY=) no-repeat top center / cover, black;
+    background: url(https://media.istockphoto.com/id/1303182525/es/foto/fondo-abstracto-blanco-azul-claro-degradado-de-color-p%C3%BArpura-desenfocado.jpg?s=612x612&w=0&k=20&c=cWDzgcPOCGDqzmMS0tOOpri65oN7BMVDWQPmAKFEPxY=) no-repeat top center / cover, black;
 
 }
 
@@ -79,7 +79,7 @@ background: url(https://media.istockphoto.com/id/1303182525/es/foto/fondo-abstra
     text-shadow: whitesmoke 0.2px 0.2px;
 }
 
-/*.dropdown-menu {
+.dropdown-menu {
     background-color: #fff ;
     border-radius: 5px ;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9) ;
@@ -87,7 +87,24 @@ background: url(https://media.istockphoto.com/id/1303182525/es/foto/fondo-abstra
     margin-left: 10px ;
     transition: all 0.5s ease-out;
     min-width: 200px;
-}*/
+}
+
+/* Cambios para mostrar el dropdown al pasar el mouse */
+.nav-item.dropdown:hover .dropdown-menu {
+    display: block; /* Mostrar menú al hacer hover */
+    width: auto;
+    visibility: visible; /* Asegurar visibilidad */
+    opacity: 1; /* Efecto suave */
+    transform: translateY(0); /* Restablecer posición */
+}
+
+.dropdown-menu {
+    display: none; /* Ocultar inicialmente */
+    visibility: hidden; /* Compatibilidad */
+    opacity: 0; /* Suavidad */
+    transform: translateY(10px); /* Efecto de desplazamiento */
+    transition: all 0.3s ease-in-out; /* Transición suave */
+}
 
 .dropdown-item, .nav-link {
     color: #666777 ;

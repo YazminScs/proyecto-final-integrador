@@ -21,4 +21,8 @@ public interface IUsuarioDAO {
      int obtenerIdPorNombreUsuario(String usuario_nom);
      
      Usuario obtenerUsuarioPorId(int usuario_id);
+     
+     Usuario obtenerUsuarioPorUsername(String usuario_nom);
+     
+     boolean actualizarUsuario(Usuario usuario);
 }

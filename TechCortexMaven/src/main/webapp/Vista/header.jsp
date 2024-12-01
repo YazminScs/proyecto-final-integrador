@@ -12,7 +12,7 @@
         <header>
             <nav class="navbar navbar-expand-lg fixed">
                 <div class="container-fluid">
-                    <a class="navbar-brand container-logo me-auto fs-3" href="#">
+                    <a class="navbar-brand container-logo me-auto fs-3" href="<%=request.getContextPath()%>/index.jsp">
                         <img
                             src="https://github.com/EduardoVargasZumaeta/Tiendita_Foley/blob/main/techcortex-logo.jpeg?raw=true"
                             alt="Web Development"
@@ -77,14 +77,13 @@
                                         <a
                                             class="nav-link dropdown" 
                                             role="button" 
-                                            data-bs-toggle="dropdown" 
                                             aria-expanded="false"
                                             >
                                             Bienvenido, <%= session.getAttribute("username") != null ? session.getAttribute("username") : "Usuario"%>
                                         </a>
-                                        <ul class="dropdown-menu dropdown-menu-right">
+                                        <ul class="dropdown-menu">
                                             <li><a class="dropdown-item" href="<%=request.getContextPath()%>/ControladorUsuarios?accion=perfil">Perfil</a></li>
-                                            <li><a class="dropdown-item" href="<%=request.getContextPath()%>/Vista/mis-compras.jsp">Mis compras</a></li>
+                                            <li><a class="dropdown-item" href="<%=request.getContextPath()%>/ControladorUsuarios?accion=compras">Mis compras</a></li>
                                             <li><a class="dropdown-item" href="<%=request.getContextPath()%>/ControladorUsuarios?accion=logout">Cerrar sesión</a></li>
                                         </ul>
                                     </li>
@@ -112,16 +111,6 @@
             </nav>
         </header>
 
-        <script>
-            const navLinks = document.querySelectorAll(".navbar-nav .nav-link");
-
-            navLinks.forEach((link) => {
-                link.addEventListener("click", function () {
-                    navLinks.forEach((item) => item.classList.remove("active")); // Quita la clase active de todos
-                    this.classList.add("active"); // Agrega la clase active al enlace clicado
-                });
-            });
-        </script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     </body>
 </html>

@@ -1,13 +1,18 @@
 package Controlador;
 
 import DAO.CarritoDAO;
+import DAO.DetalleCarritoDAO;
+import DAO.OrdenDAO;
 import DAO.UsuarioDAO;
 import Modelo.Carrito;
+import Modelo.CarritoInfo;
+import Modelo.DetalleCarrito;
+import Modelo.Orden;
 import Modelo.Usuario;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -31,8 +36,17 @@ public class ControladorUsuarios extends HttpServlet {
         String accion = request.getParameter("accion");
 
         if ("logout".equals(accion)) {
+            HttpSession ses = request.getSession();
+            String username = (String) ses.getAttribute("username");
             HttpSession session = request.getSession(false);
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            CarritoDAO carritoDAO = new CarritoDAO();
+
+            Usuario usuario = usuarioDAO.obtenerUsuarioPorId(usuarioDAO.obtenerIdPorNombreUsuario(username));
+            int carrito_id = carritoDAO.obtenerUltimoIdCarritoPorUsuario(usuario);
+
             if (session != null) {
+                carritoDAO.eliminarCarritoPorId(carrito_id);
                 session.invalidate();
             }
             response.sendRedirect("Vista/login.jsp");
@@ -44,8 +58,31 @@ public class ControladorUsuarios extends HttpServlet {
 
             request.setAttribute("usuario", usuario);
             request.getRequestDispatcher("Vista/perfil.jsp").forward(request, response);
-        }
+        } else if ("compras".equals(accion)) {
+            UsuarioDAO usuarioDAO = new UsuarioDAO();
+            DetalleCarritoDAO detalleCarritoDAO = new DetalleCarritoDAO();
+            CarritoDAO carritoDAO = new CarritoDAO();
+            OrdenDAO ordenDAO = new OrdenDAO();
 
+            HttpSession session = request.getSession();
+            String username = (String) session.getAttribute("username");
+            Usuario usuario = usuarioDAO.obtenerUsuarioPorId(usuarioDAO.obtenerIdPorNombreUsuario(username));
+
+            List<Carrito> carritos = carritoDAO.obtenerCarritosPorUsuario(usuario);
+
+            List<CarritoInfo> carritosInfo = new ArrayList<>();
+
+            for (Carrito carrito : carritos) {
+                List<DetalleCarrito> detalle = detalleCarritoDAO.listarDetalleCarritoPorId(carrito.getCarrito_id());
+                Orden orden = ordenDAO.obtenerOrdenPorCarrito(carrito);
+                CarritoInfo info = new CarritoInfo(carrito, detalle, orden);
+
+                carritosInfo.add(info);
+            }
+
+            request.setAttribute("carritoInfo", carritosInfo);
+            request.getRequestDispatcher("Vista/mis-compras.jsp").forward(request, response);
+        }
     }
 
     @Override
@@ -58,7 +95,7 @@ public class ControladorUsuarios extends HttpServlet {
             registrarUsuario(request, response);
         } else if ("login".equals(action)) {
             iniciarSesion(request, response);
-        } else if ("edit".equals(action)) {
+        } else if ("editar".equals(action)) {
             editarSesion(request, response);
         }
     }
@@ -106,11 +143,13 @@ public class ControladorUsuarios extends HttpServlet {
         String username = request.getParameter("signin-username");
         String password = request.getParameter("signin-password");
         UsuarioDAO userDAO = new UsuarioDAO();
+        CarritoDAO carritoDAO = new CarritoDAO();
 
         if (userDAO.autenticar(username, password)) {
             if ((userDAO.obtenerRol(username)).equals("Administrador")) {
                 response.sendRedirect("Vista/admin.jsp");
             } else if ((userDAO.obtenerRol(username)).equals("Cliente")) {
+                carritoDAO.registrarCarrito(userDAO.obtenerUsuarioPorUsername(username));
                 response.sendRedirect("index.jsp");
             }
             HttpSession session = request.getSession();
@@ -125,7 +164,7 @@ public class ControladorUsuarios extends HttpServlet {
 
     private void editarSesion(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
-        String usernameSesion = (String) session.getAttribute("usuario");
+        String usernameSesion = (String) session.getAttribute("username");
 
         if (usernameSesion == null) {
             session.setAttribute("error", "Debes iniciar sesión para editar tu perfil.");
@@ -139,24 +178,19 @@ public class ControladorUsuarios extends HttpServlet {
         int phone = Integer.parseInt(request.getParameter("phone"));
 
         UsuarioDAO userDAO = new UsuarioDAO();
-        Usuario usuario = new Usuario();
-
-        usuario.setUsername(username);
-        usuario.setEmail(email);
-        usuario.setAddress(address);
-        usuario.setPhone(phone);
-
         Usuario usuarioActual = userDAO.obtenerUsuarioPorUsername(usernameSesion);
+        usuarioActual.setUsername(username);
+        usuarioActual.setEmail(email);
+        usuarioActual.setAddress(address);
+        usuarioActual.setPhone(phone);
 
-        usuario.setRol(usuarioActual.getRol());
-        usuario.setId(usuarioActual.getId());
+        mostrarUsuarioEnConsola(usuarioActual);
 
-        mostrarUsuarioEnConsola(usuario);
-
-        boolean actualizado = userDAO.actualizarUsuario(usuario);
+        boolean actualizado = userDAO.actualizarUsuario(usuarioActual);
 
         if (actualizado) {
-            session.setAttribute("usuario", usuario);
+            session.setAttribute("username", username);
+            session.setAttribute("usuario", usuarioActual);
             session.setAttribute("message", "Perfil actualizado exitosamente.");
             response.sendRedirect("Vista/perfil.jsp");
         } else {
@@ -178,10 +212,5 @@ public class ControladorUsuarios extends HttpServlet {
         } else {
             System.out.println("El usuario es nulo. No hay información para mostrar.");
         }
-    }
-
-    @Override
-    public String getServletInfo() {
-        return "Short description";
     }
 }

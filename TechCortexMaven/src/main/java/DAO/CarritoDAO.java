@@ -7,11 +7,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CarritoDAO implements ICarritoDAO {
-    DetalleCarritoDAO detalleDAO= new DetalleCarritoDAO();
-    
+
+    DetalleCarritoDAO detalleDAO = new DetalleCarritoDAO();
+
     @Override
     public boolean registrarCarrito(Usuario usuario) {
         int usuario_id = usuario.getId();
@@ -100,9 +105,9 @@ public class CarritoDAO implements ICarritoDAO {
         String sql = "DELETE FROM carrito WHERE carrito_id = ?";
         try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
             ps.setInt(1, carrito_id);
-            
+
             detalleDAO.eliminarDetallePorId(carrito_id);
-            
+
             int filasAfectadas = ps.executeUpdate();
 
             return filasAfectadas > 0;
@@ -110,5 +115,37 @@ public class CarritoDAO implements ICarritoDAO {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public List<Carrito> obtenerCarritosPorUsuario(Usuario usuario) {
+        List<Carrito> carritos = new ArrayList<>();
+        int usuario_id = usuario.getId();
+
+        String sql = "SELECT * FROM carrito WHERE usuario_id = ?";
+
+        try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
+            ps.setInt(1, usuario_id);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Carrito carrito = new Carrito();
+                carrito.setCarrito_id(rs.getInt("carrito_id"));
+                carrito.setCarrito_fecha(rs.getDate("carrito_fecha"));
+                carrito.setCarrito_total(rs.getDouble("carrito_total"));
+                carrito.setUsuario(usuario);
+                
+                carritos.add(carrito);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            try {
+                throw new SQLException("Error al obtener los datos del carrito", e);
+            } catch (SQLException ex) {
+                Logger.getLogger(CarritoDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return carritos;
     }
 }

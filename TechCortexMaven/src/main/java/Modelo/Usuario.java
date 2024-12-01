@@ -21,6 +21,15 @@ public class Usuario {
         this.phone = phone;
         this.rol = rol;
     }
+    
+    public Usuario(String username, String email, String password, String address, int phone, String rol) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.address = address;
+        this.phone = phone;
+        this.rol = rol;
+    }
 
     public int getId() {
         return id;

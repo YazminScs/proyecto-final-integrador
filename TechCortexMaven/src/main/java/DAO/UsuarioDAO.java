@@ -164,13 +164,13 @@ public class UsuarioDAO implements IUsuarioDAO {
 
     @Override
     public Usuario obtenerUsuarioPorId(int usuario_id) {
-        Usuario usuario = null; 
+        Usuario usuario = null;
         String sql = "SELECT * FROM usuario WHERE usuario_id = ?";
 
         try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
 
-            ps.setInt(1, usuario_id); 
-            ResultSet resultSet = ps.executeQuery();  
+            ps.setInt(1, usuario_id);
+            ResultSet resultSet = ps.executeQuery();
 
             if (resultSet.next()) {
                 String usuario_nom = resultSet.getString("usuario_nom");
@@ -188,4 +188,60 @@ public class UsuarioDAO implements IUsuarioDAO {
 
         return usuario;
     }
+
+    @Override
+    public Usuario obtenerUsuarioPorUsername(String usuario_nom) {
+        Usuario usuario = null;
+        String sql = "SELECT * FROM usuario WHERE usuario_nom = ?";
+        try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
+            ps.setString(1, usuario_nom);
+            ResultSet resultSet = ps.executeQuery();
+
+            if (resultSet.next()) {
+                int usuario_id = resultSet.getInt("usuario_id");
+                String usuario_email = resultSet.getString("usuario_email");
+                String usuario_pass = resultSet.getString("usuario_pass");
+                String usuario_rol = resultSet.getString("usuario_rol");
+                String usuario_dir = resultSet.getString("usuario_dir");
+                int usuario_tel = resultSet.getInt("usuario_tel");
+
+                usuario = new Usuario(usuario_id, usuario_nom, usuario_email, usuario_pass, usuario_dir, usuario_tel, usuario_rol);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return usuario;
+    }
+
+    @Override
+    public boolean actualizarUsuario(Usuario usuario) {
+        String sql = "UPDATE usuario SET "
+                + "usuario_nom = ?, "
+                + "usuario_email = ?, "
+                + "usuario_pass = ?, "
+                + "usuario_rol = ?, "
+                + "usuario_dir = ?, "
+                + "usuario_tel = ? "
+                + "WHERE usuario_id = ?";
+
+        try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
+
+            // Asignar los valores a los parámetros
+            ps.setString(1, usuario.getUsername());
+            ps.setString(2, usuario.getEmail());
+            ps.setString(3, usuario.getPassword());
+            ps.setString(4, usuario.getRol());
+            ps.setString(5, usuario.getAddress());
+            ps.setInt(6, usuario.getPhone());
+            ps.setInt(7, usuario.getId());
+
+            int rowsUpdated = ps.executeUpdate();
+            return rowsUpdated > 0; 
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; 
+        }
+    }
+
 }
