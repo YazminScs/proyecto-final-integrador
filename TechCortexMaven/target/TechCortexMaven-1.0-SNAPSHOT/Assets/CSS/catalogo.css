@@ -1,0 +1,57 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    color: #fff;
+}
+
+/* Tema morado */
+h1 {
+    text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.btn-outline-primary {
+    border-color: #6a0dad !important;
+    color: black !important;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-outline-primary.active, .btn-outline-primary:hover {
+    background-color: #9D79AE !important;
+    color: #fff;
+}
+
+/* Animaciones */
+.animate {
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.animate:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+}
+
+.product-card {
+    display: none; /* Ocultar por defecto */
+}
+
+.product-card[data-category="Mouses"],
+.product-card[data-category="Teclados"],
+.product-card[data-category="Auriculares"],
+.product-card[data-category="Sillas Gaming"],
+.product-card[data-category="Webcams"],
+.product-card[data-category="Alfombrillas"],
+.product-card[data-category="Parlantes"],
+.product-card[data-category="Microfonos"],
+.product-card[data-category="Monitores"] {
+    display: block; /* Mostrar los productos filtrados */
+}
+
+.btn-primary{
+    border-color: #6a0dad !important;
+    background-color: #9D79AE !important;
+    color: #fff;
+}
+
+.btn-light:hover{
+    background-color: #9C0192 !important;
+}

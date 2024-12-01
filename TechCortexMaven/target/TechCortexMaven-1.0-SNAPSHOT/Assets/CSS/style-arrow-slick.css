@@ -1,0 +1,28 @@
+.slick-prev,
+.slick-next {
+    z-index: 1;
+    background-color: black !important; /* Fondo negro */
+    color: white !important;            /* Texto blanco */
+    border: none !important;           /* Sin borde */
+    border-radius: .25rem !important;   /* Bordes redondeados */
+    width: 40px !important;            /* Ancho del botón */
+    height: 40px !important;            /* Alto del botón */
+    display: flex !important;          /* Centrar el contenido */
+    align-items: center !important;    /* Alinear verticalmente */
+    justify-content: center !important; /* Alinear horizontalmente */
+    cursor: pointer !important;        /* Cambiar el cursor al pasar sobre el botón */
+    transition: background-color 0.3s !important; /* Transición suave */
+}
+
+.slick-prev:hover,
+.slick-next:hover {
+    background-color: #444 !important; /* Color de fondo más claro al pasar el ratón */
+}
+
+.slick-prev:before,
+.slick-next:before {
+    color: white !important; /* Color del ícono */
+    font-size: 20px !important; /* Tamaño del ícono */
+}
+
+

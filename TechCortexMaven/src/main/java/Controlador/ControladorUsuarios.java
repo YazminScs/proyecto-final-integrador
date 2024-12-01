@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.commons.lang3.StringUtils;
 
 @WebServlet(name = "ControladorUsuarios", urlPatterns = {"/ControladorUsuarios"})
 public class ControladorUsuarios extends HttpServlet {
@@ -169,29 +170,62 @@ public class ControladorUsuarios extends HttpServlet {
 
     private void iniciarSesion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("signin-username");
-        String password = request.getParameter("signin-password");
-        UsuarioDAO userDAO = new UsuarioDAO();
-        CarritoDAO carritoDAO = new CarritoDAO();
+    String password = request.getParameter("signin-password");
 
-        if (userDAO.autenticar(username, password)) {
-            if ("Administrador".equals(userDAO.obtenerRol(username))) {
-                response.sendRedirect("Vista/admin.jsp");
-                LOGGER.log(Level.INFO, "Acceso como Administrador: {0}", username);
-            } else if ("Cliente".equals(userDAO.obtenerRol(username))) {
-                carritoDAO.registrarCarrito(userDAO.obtenerUsuarioPorUsername(username));
-                response.sendRedirect("index.jsp");
-                LOGGER.log(Level.INFO, "Acceso como Cliente: {0}", username);
-            }
+    // Sanitización básica de datos de entrada usando Commons Lang
+    String sanitizedUsername = null;
+    String sanitizedPassword = null;
 
-            HttpSession session = request.getSession();
-            session.setAttribute("username", username);
-            session.setAttribute("message", "Inicio de sesión exitoso. ¡Bienvenido, " + username + "!");
-        } else {
-            HttpSession session = request.getSession();
-            session.setAttribute("error", "Nombre de usuario o contraseña incorrectos.");
-            response.sendRedirect("Vista/login.jsp");
-            LOGGER.log(Level.WARNING, "Intento de inicio de sesión fallido para el usuario: {0}", username);
+    try {
+        // Validar que los campos no estén vacíos y tengan una longitud adecuada
+        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+            throw new IllegalArgumentException("El nombre de usuario o la contraseña no pueden estar vacíos.");
         }
+
+        // Limitar la longitud de los campos de entrada
+        sanitizedUsername = StringUtils.substring(username, 0, 50); // Limita el nombre de usuario a 50 caracteres
+        sanitizedPassword = StringUtils.substring(password, 0, 100); // Limita la contraseña a 100 caracteres
+
+        // Opcional: Validar que no haya caracteres inválidos o maliciosos (esto depende de la lógica de tu aplicación)
+        // Se podría usar alguna expresión regular para evitar caracteres especiales, por ejemplo:
+        if (!sanitizedUsername.matches("^[a-zA-Z0-9_]+$")) {
+            throw new IllegalArgumentException("El nombre de usuario contiene caracteres no permitidos.");
+        }
+
+    } catch (IllegalArgumentException e) {
+        // Si ocurre una excepción de validación, redirige a la página de login con un mensaje de error
+        HttpSession session = request.getSession();
+        session.setAttribute("error", "Los datos ingresados no son válidos: " + e.getMessage());
+        response.sendRedirect("Vista/login.jsp");
+        return; // Termina la ejecución si la validación falla
+    }
+
+    UsuarioDAO userDAO = new UsuarioDAO();
+    CarritoDAO carritoDAO = new CarritoDAO();
+
+    // Verificar las credenciales de usuario
+    if (userDAO.autenticar(sanitizedUsername, sanitizedPassword)) {
+        // Autenticación exitosa
+        HttpSession session = request.getSession();
+        session.setAttribute("username", sanitizedUsername);
+
+        // Verifica el rol y redirige según el tipo de usuario
+        String rol = userDAO.obtenerRol(sanitizedUsername);
+        if ("Administrador".equals(rol)) {
+            session.setAttribute("message", "Inicio de sesión exitoso como Administrador. ¡Bienvenido, " + sanitizedUsername + "!");
+            response.sendRedirect("Vista/admin.jsp");
+        } else if ("Cliente".equals(rol)) {
+            // Registra un carrito si el usuario es cliente
+            carritoDAO.registrarCarrito(userDAO.obtenerUsuarioPorUsername(sanitizedUsername));
+            session.setAttribute("message", "Inicio de sesión exitoso como Cliente. ¡Bienvenido, " + sanitizedUsername + "!");
+            response.sendRedirect("index.jsp");
+        }
+    } else {
+        // Si la autenticación falla, redirige al login con un mensaje de error
+        HttpSession session = request.getSession();
+        session.setAttribute("error", "Nombre de usuario o contraseña incorrectos.");
+        response.sendRedirect("Vista/login.jsp");
+    }
     }
 
     private void editarSesion(HttpServletRequest request, HttpServletResponse response) throws IOException {

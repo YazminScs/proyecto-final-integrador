@@ -1,0 +1,98 @@
+.border-products {
+    border: 2px solid blueviolet !important;
+}
+
+.card-products {
+    height: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    color: #fff !important;
+    border-radius: 0.7em;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease,border-color 0.3s ease;
+    position: relative;
+    opacity: 0;
+    animation: fadeIn 0.8s forwards ease;
+    border: 2px solid transparent; 
+}
+
+/* Cambio de color en el borde al hacer hover */
+.card-products:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0px 8px rgba(0, 0, 0, 0.8);
+    border-color: blueviolet;
+}
+
+.card-products img {
+    width: 100% !important;
+    height: 200px !important;
+    object-fit: cover !important;
+    border-radius: 0.5em 0.5em 0 0 !important;
+    transition: transform 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.card-products img:hover {
+    transform: scale(1.1);
+    border-color: white;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.img-product {
+    box-shadow: 0 0 15px 5px rgba(0, 0, 0, 0.5) !important;
+}
+
+.card-body {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    flex-grow: 1;
+}
+
+.text-section {
+    max-width: 100% !important;
+    flex-grow: 1;
+}
+
+.cta-section {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-end !important;
+    margin-top: 1em;
+}
+
+.cta-section .btn {
+    padding: 0.3em 0.8em !important;
+    background-color: #ffffff !important;
+    color: black !important;
+    border-color: #ffffff !important;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.cta-section .btn:hover {
+    background-color: grey !important;
+    color: #ffffff !important;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.8);
+    border-color: blueviolet !important;
+}
+
+@media screen and (max-width: 766px) {
+    .card-products {
+        font-size: 0.9em !important;
+        flex-direction: column !important;
+    }
+}
