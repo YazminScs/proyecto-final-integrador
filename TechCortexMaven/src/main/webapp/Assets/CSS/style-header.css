@@ -79,7 +79,7 @@
     text-shadow: whitesmoke 0.2px 0.2px;
 }
 
-.dropdown-menu {
+.abajo-menu {
     background-color: #fff ;
     border-radius: 5px ;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.9) ;
@@ -90,7 +90,7 @@
 }
 
 /* Cambios para mostrar el dropdown al pasar el mouse */
-.nav-item.dropdown:hover .dropdown-menu {
+.abajo:hover .abajo-menu {
     display: block; /* Mostrar menú al hacer hover */
     width: auto;
     visibility: visible; /* Asegurar visibilidad */
@@ -98,7 +98,7 @@
     transform: translateY(0); /* Restablecer posición */
 }
 
-.dropdown-menu {
+.abajo-menu {
     display: none; /* Ocultar inicialmente */
     visibility: hidden; /* Compatibilidad */
     opacity: 0; /* Suavidad */

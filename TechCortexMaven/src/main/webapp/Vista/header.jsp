@@ -73,15 +73,15 @@
                                             <i class="fa fa-shopping-cart"></i>
                                         </a>                                    
                                     </li>
-                                    <li class="nav-item dropdown">
+                                    <li class="nav-item dropdown abajo">
                                         <a
-                                            class="nav-link dropdown" 
+                                            class="nav-link awn" 
                                             role="button" 
                                             aria-expanded="false"
                                             >
                                             Bienvenido, <%= session.getAttribute("username") != null ? session.getAttribute("username") : "Usuario"%>
                                         </a>
-                                        <ul class="dropdown-menu">
+                                        <ul class="dropdown-menu abajo">
                                             <li><a class="dropdown-item" href="<%=request.getContextPath()%>/ControladorUsuarios?accion=perfil">Perfil</a></li>
                                             <li><a class="dropdown-item" href="<%=request.getContextPath()%>/ControladorUsuarios?accion=compras">Mis compras</a></li>
                                             <li><a class="dropdown-item" href="<%=request.getContextPath()%>/ControladorUsuarios?accion=logout">Cerrar sesión</a></li>
