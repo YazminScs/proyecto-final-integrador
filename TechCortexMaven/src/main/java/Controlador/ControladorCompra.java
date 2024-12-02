@@ -109,7 +109,7 @@ public class ControladorCompra extends HttpServlet {
         DecimalFormat df = new DecimalFormat("#.00");
         String totalFormateado = df.format(total);
 
-        boolean actualizado = carritoDAO.actualizarCarrito(total, carrito_id);
+        boolean actualizado = carritoDAO.actualizarCarrito(Double.parseDouble(totalFormateado), carrito_id);
         LOGGER.log(Level.INFO, "Carrito actualizado: {0} para carrito ID: {1}", new Object[]{actualizado, carrito_id});
 
         boolean registrado = ordenDAO.registrarOrden(carritoDAO.obtenerCarritoPorId(carrito_id), metodoPagoDAO.obtenerPagoPorId(pago_id), "Pendiente");
