@@ -29,23 +29,35 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "ControladorReporte", urlPatterns = {"/ControladorReporte"})
 public class ControladorReporte extends HttpServlet {
 
+    private static final Logger LOGGER = Logger.getLogger(ControladorReporte.class.getName());
     private DetalleCarritoDAO detalleCarritoDAO = new DetalleCarritoDAO();
     private CarritoDAO carritoDAO = new CarritoDAO();
 
+    @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        // Obtener carrito_id desde el parámetro de la URL
         String carritoIdParam = request.getParameter("carrito_id");
 
         if (carritoIdParam == null || carritoIdParam.isEmpty()) {
+            LOGGER.warning("Carrito ID no proporcionado.");
             response.getWriter().write("Carrito ID no proporcionado.");
             return;
         }
 
-        int carrito_id = Integer.parseInt(carritoIdParam);
+        int carrito_id;
+        try {
+            carrito_id = Integer.parseInt(carritoIdParam);
+        } catch (NumberFormatException e) {
+            LOGGER.log(Level.WARNING, "Carrito ID inv\u00e1lido: {0}", carritoIdParam);
+            response.getWriter().write("Carrito ID inválido.");
+            return;
+        }
 
         Connection conn = null;
         try {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tiendita_foley", "root", "");
-            
+            LOGGER.info("Conexión a la base de datos establecida.");
+
             String sql = "SELECT o.orden_id, p.pago_nom, o.orden_estado, c.carrito_fecha, c.carrito_total, u.usuario_nom "
                     + "FROM carrito c "
                     + "INNER JOIN orden o ON c.carrito_id = o.carrito_id "
@@ -57,6 +69,8 @@ public class ControladorReporte extends HttpServlet {
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
+                LOGGER.log(Level.INFO, "Datos del carrito obtenidos correctamente para carrito_id: {0}", carrito_id);
+
                 int orden_id = rs.getInt("orden_id");
                 String pago_nom = rs.getString("pago_nom");
                 String orden_estado = rs.getString("orden_estado");
@@ -64,7 +78,6 @@ public class ControladorReporte extends HttpServlet {
                 double carrito_total = rs.getDouble("carrito_total");
                 String usuario_nom = rs.getString("usuario_nom");
 
-                // Obtener los detalles del carrito
                 String detalle = "SELECT d.detalle_cant, d.detalle_price, p.producto_nom FROM carrito c "
                         + "INNER JOIN detalle_carrito d ON d.carrito_id = c.carrito_id "
                         + "JOIN producto p ON p.producto_id = d.producto_id "
@@ -78,9 +91,8 @@ public class ControladorReporte extends HttpServlet {
 
                 Document document = new Document();
                 PdfWriter.getInstance(document, response.getOutputStream());
-
                 document.open();
-                
+
                 document.add(new Paragraph("Boleta de Orden", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18)));
                 document.add(new Paragraph("Cliente: " + usuario_nom));
                 document.add(new Paragraph("Número de orden: " + orden_id));
@@ -114,25 +126,26 @@ public class ControladorReporte extends HttpServlet {
                 document.add(table);
                 document.add(new Chunk("\n"));
                 document.add(new Paragraph("Total: " + carrito_total));
-
                 document.close();
-
+                LOGGER.log(Level.INFO, "Documento PDF generado con \u00e9xito para carrito_id: {0}", carrito_id);
             } else {
+                LOGGER.log(Level.WARNING, "Carrito no encontrado para carrito_id: {0}", carrito_id);
                 response.getWriter().write("Carrito no encontrado.");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "Error en la base de datos", e);
             response.getWriter().write("Error en la base de datos.");
         } catch (DocumentException ex) {
-            Logger.getLogger(ControladorReporte.class.getName()).log(Level.SEVERE, null, ex);
+            LOGGER.log(Level.SEVERE, "Error al generar el PDF", ex);
             response.getWriter().write("Error al generar el PDF.");
         } finally {
             try {
                 if (conn != null) {
                     conn.close();
+                    LOGGER.info("Conexión a la base de datos cerrada.");
                 }
             } catch (SQLException ex) {
-                ex.printStackTrace();
+                LOGGER.log(Level.SEVERE, "Error al cerrar la conexión a la base de datos", ex);
             }
         }
     }
