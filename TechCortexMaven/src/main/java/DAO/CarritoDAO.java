@@ -134,7 +134,7 @@ public class CarritoDAO implements ICarritoDAO {
                 carrito.setCarrito_fecha(rs.getDate("carrito_fecha"));
                 carrito.setCarrito_total(rs.getDouble("carrito_total"));
                 carrito.setUsuario(usuario);
-                
+
                 carritos.add(carrito);
             }
         } catch (SQLException e) {
@@ -148,4 +148,25 @@ public class CarritoDAO implements ICarritoDAO {
 
         return carritos;
     }
+
+    @Override
+    public double sumaTotal() {
+        String sql = "SELECT SUM(carrito_total) FROM carrito";
+        double total = 0.0;
+
+        try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                total = rs.getDouble(1); 
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al calcular la suma total", e);
+        }
+
+        return total;
+    }
+
 }

@@ -8,4 +8,8 @@ public interface IOrdenDAO {
     boolean registrarOrden(Carrito carrito, MetodosPago pago, String orden_estado);
     
     Orden obtenerOrdenPorCarrito(Carrito carrito);
+    
+    int contarOrdenesPendientes();
+    
+    int contarOrdenesFinalizadas();
 }

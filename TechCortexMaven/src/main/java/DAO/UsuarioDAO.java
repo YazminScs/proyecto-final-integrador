@@ -189,59 +189,61 @@ public class UsuarioDAO implements IUsuarioDAO {
         return usuario;
     }
 
-    @Override
-    public Usuario obtenerUsuarioPorUsername(String usuario_nom) {
-        Usuario usuario = null;
+    public Usuario obtenerUsuarioPorUsername(String username) {
         String sql = "SELECT * FROM usuario WHERE usuario_nom = ?";
-        try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
-            ps.setString(1, usuario_nom);
-            ResultSet resultSet = ps.executeQuery();
+        try (Connection conn = Conexion.getConexion(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
 
-            if (resultSet.next()) {
-                int usuario_id = resultSet.getInt("usuario_id");
-                String usuario_email = resultSet.getString("usuario_email");
-                String usuario_pass = resultSet.getString("usuario_pass");
-                String usuario_rol = resultSet.getString("usuario_rol");
-                String usuario_dir = resultSet.getString("usuario_dir");
-                int usuario_tel = resultSet.getInt("usuario_tel");
-
-                usuario = new Usuario(usuario_id, usuario_nom, usuario_email, usuario_pass, usuario_dir, usuario_tel, usuario_rol);
+            if (rs.next()) {
+                Usuario usuario = new Usuario();
+                usuario.setId(rs.getInt("id"));
+                usuario.setUsername(rs.getString("username"));
+                usuario.setEmail(rs.getString("email"));
+                usuario.setPhone(rs.getInt("phone"));
+                usuario.setAddress(rs.getString("address"));
+                usuario.setRol(rs.getString("rol"));
+                return usuario;
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return usuario;
+        return null;
     }
+
+    public boolean actualizarUsuarioPorId(Usuario usuario) {
+        String sql = "UPDATE usuario SET usuario_nom = ?, usuario_email = ?, usuario_tel = ?, usuario_dir = ? WHERE usuario_id = ?";
+        try (Connection conn = Conexion.getConexion(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, usuario.getUsername());
+            stmt.setString(2, usuario.getEmail());
+            stmt.setInt(3, usuario.getPhone());
+            stmt.setString(4, usuario.getAddress());
+            stmt.setInt(5, usuario.getId());
+
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean eliminarUsuarioPorId(int id) {
+    String sql = "DELETE FROM usuario WHERE usuario_id = ?";
+    try (Connection conn = Conexion.getConexion(); PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, id);
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0; // Devuelve true si se eliminó alguna fila
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
 
     @Override
     public boolean actualizarUsuario(Usuario usuario) {
-        String sql = "UPDATE usuario SET "
-                + "usuario_nom = ?, "
-                + "usuario_email = ?, "
-                + "usuario_pass = ?, "
-                + "usuario_rol = ?, "
-                + "usuario_dir = ?, "
-                + "usuario_tel = ? "
-                + "WHERE usuario_id = ?";
-
-        try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
-
-            // Asignar los valores a los parámetros
-            ps.setString(1, usuario.getUsername());
-            ps.setString(2, usuario.getEmail());
-            ps.setString(3, usuario.getPassword());
-            ps.setString(4, usuario.getRol());
-            ps.setString(5, usuario.getAddress());
-            ps.setInt(6, usuario.getPhone());
-            ps.setInt(7, usuario.getId());
-
-            int rowsUpdated = ps.executeUpdate();
-            return rowsUpdated > 0; 
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false; 
-        }
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
+
 
 }

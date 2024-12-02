@@ -3,6 +3,9 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="<%=request.getContextPath()%>/Assets/CSS/style-header.css?v=1.0">
     </head>
     <body>
         <!--Topbar-->
@@ -36,24 +39,40 @@
                         </form>
                     </div>
                 </li>
-
-                <!-- Nav Item - User Information -->
                 <li class="nav-item dropdown no-arrow">
-                    <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                        <span class="mr-2 d-none d-lg-inline text-gray-600 small"
-                              th:text="${session.usuario.getNombreUsuario}">Holi</span>
-                    </a>
-                    <!-- Dropdown - User Information -->
-                    <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
-                        <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-                            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Logout
-                        </a>
-                    </div>
+                    <!--Login-->
+                    <%@ page session="true" %>
+                    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+                    <div class="text-center justify-content-center">
+                        <c:choose>
+                            <c:when test="${not empty sessionScope.username}">
+                                <ul class="navbar-nav justify-content-center flex-grow-1 pe-3">
+                                    <li class="nav-item dropdown">
+                                        <a
+                                            class="nav-link dropdown text-black" 
+                                            role="button" 
+                                            aria-expanded="false"
+
+                                            >
+                                            Bienvenido, <%= session.getAttribute("username") != null ? session.getAttribute("username") : "Usuario"%>
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item" href="<%=request.getContextPath()%>/ControladorUsuarios?accion=logout">Cerrar sesión</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+
+                            </c:when>
+                            <c:otherwise>
+                                <a href="<%=request.getContextPath()%>/Vista/login.jsp" class="login-button">Login</a>
+                                <a href="<%=request.getContextPath()%>/Vista/login.jsp" class="login-button">Sign-up</a>
+                            </c:otherwise>
+                        </c:choose>
                 </li>
             </ul>
         </nav>
-        <!--Fin topbar-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
     </body>
 </html>

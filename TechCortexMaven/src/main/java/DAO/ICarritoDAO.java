@@ -17,4 +17,6 @@ public interface ICarritoDAO {
     List<Carrito> obtenerCarritosPorUsuario(Usuario usuario);
     
     boolean eliminarCarritoPorId(int carrito_id);
+  
+    double sumaTotal();
 }

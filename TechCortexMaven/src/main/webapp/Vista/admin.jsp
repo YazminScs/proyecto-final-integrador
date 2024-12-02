@@ -50,7 +50,7 @@
                                                     Ganancias Totales
                                                 </div>
                                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    <span>0.00</span>
+                                                    <span>${total}</span>
                                                 </div>
                                             </div>
                                             <div class="col-auto">
@@ -71,7 +71,7 @@
                                                     Productos
                                                 </div>
                                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    <span>28</span>
+                                                    <span>${contadorProductos}</span>
                                                 </div>
                                             </div>
                                             <div class="col-auto">
@@ -100,8 +100,8 @@
                                                     <div class="col">
                                                         <div class="progress progress-sm mr-2">
                                                             <div class="progress-bar bg-info" role="progressbar"
-                                                                 th:style="'width: ' + ${porcentajeEntregados} + '%'"
-                                                                 th:aria-valuenow="${porcentajeEntregados}" aria-valuemin="0"
+                                                                 style="'width: 20%'"
+                                                                 aria-valuenow=aria-valuemin="20"
                                                                  aria-valuemax="100">
                                                             </div>
                                                         </div>
@@ -118,19 +118,19 @@
 
                             <!-- Pending Requests Card Example -->
                             <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card border-left-success shadow h-100 py-2">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                    Reservas pendientes
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                    Porcentaje de órdenes finalizadas
                                                 </div>
                                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    <span>0</span>
+                                                    <span>${porcentajeFinalizadas}%</span>
                                                 </div>
                                             </div>
                                             <div class="col-auto">
-                                                <i class="fas fa-comments fa-2x text-gray-300"></i>
+                                                <i class="fas fa-percentage fa-2x text-gray-300"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -143,7 +143,7 @@
         </div>
         <!-- Footer -->
         <%@include file="admin-footer.jsp" %>
-        
+
         <!-- End of Content Wrapper -->
         <!-- Scroll to Top Button-->
         <a class="scroll-to-top rounded" href="#page-top">

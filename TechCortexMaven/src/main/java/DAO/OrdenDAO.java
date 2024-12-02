@@ -55,4 +55,45 @@ public class OrdenDAO implements IOrdenDAO {
         }
         return orden;
     }
+
+    @Override
+    public int contarOrdenesPendientes() {
+        String sql = "SELECT COUNT(*) FROM orden WHERE orden_estado = 'Pendiente'";
+        int count = 0;
+
+        try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt(1); 
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw new RuntimeException("Error al contar órdenes pendientes", e);
+        }
+
+        return count;
+    }
+
+    @Override
+    public int contarOrdenesFinalizadas() {
+        String sql = "SELECT COUNT(*) FROM orden WHERE orden_estado = 'Finalizado'";
+        int count = 0;
+
+        try (Connection cnn = new Conexion().getConexion(); PreparedStatement ps = cnn.prepareStatement(sql)) {
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                count = rs.getInt(1); 
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace(); 
+            throw new RuntimeException("Error al contar órdenes finalizadas", e);
+        }
+
+        return count;
+    }
+
 }

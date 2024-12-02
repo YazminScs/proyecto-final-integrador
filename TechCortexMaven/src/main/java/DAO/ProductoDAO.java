@@ -275,8 +275,88 @@ public class ProductoDAO implements IProductoDAO {
 
         } catch (SQLException e) {
             e.printStackTrace();
-            return false; 
+            return false;
         }
     }
 
+    // Método para actualizar un producto
+    public boolean actualizarProductos(Producto producto) {
+        String sql = "UPDATE producto SET producto_nom = ?, producto_des = ?, producto_price = ?, producto_stock = ?, producto_url_img = ?, categoria_id = ?, marca_id = ? WHERE producto_id = ?";
+
+        try (Connection conn = Conexion.getConexion(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            // Establecer los valores para cada parámetro de la consulta
+            stmt.setString(1, producto.getNombre()); // nombre del producto
+            stmt.setString(2, producto.getDescripcion()); // descripción del producto
+            stmt.setDouble(3, producto.getPrecio()); // precio del producto
+            stmt.setInt(4, producto.getStock()); // stock del producto
+            stmt.setString(5, producto.getUrl_imagen()); // URL de la imagen
+            stmt.setInt(6, producto.getCategorias().getIdCategoria()); // ID de la categoría
+            stmt.setInt(7, producto.getMarcas().getIdMarca()); // ID de la marca
+            stmt.setInt(8, producto.getIdProducto()); // ID del producto para la condición WHERE
+
+            // Ejecutar la actualización
+            int rowsUpdated = stmt.executeUpdate();
+            return rowsUpdated > 0; // Devuelve true si se actualizó el producto, false si no
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false; // En caso de error, devuelve false
+        }
+    }
+
+    // Método para eliminar un producto
+    public boolean eliminarProducto(int idProducto) {
+        String sql = "DELETE FROM producto WHERE producto_id = ?";
+
+        try (Connection conn = Conexion.getConexion(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, idProducto);
+            int rowsDeleted = stmt.executeUpdate();
+            return rowsDeleted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean registrarProducto(Producto producto) {
+        String sql = "INSERT INTO producto (producto_nom, producto_des, producto_price, producto_stock, producto_url_img, categoria_id, marca_id) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = Conexion.getConexion(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, producto.getNombre());
+            stmt.setString(2, producto.getDescripcion());
+            stmt.setDouble(3, producto.getPrecio());
+            stmt.setInt(4, producto.getStock());
+            stmt.setString(5, producto.getUrl_imagen());
+            stmt.setInt(6, producto.getCategorias().getIdCategoria());
+            stmt.setInt(7, producto.getMarcas().getIdMarca());
+
+            int rowsInserted = stmt.executeUpdate();
+            return rowsInserted > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public int contarProductos() {
+        String sql = "SELECT COUNT(*) FROM producto";
+        int count = 0;
+
+        try (Connection conn = Conexion.getConexion(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al contar productos", e);
+        }
+
+        return count;
+    }
 }

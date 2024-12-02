@@ -74,44 +74,6 @@
             <!-- Divider -->
             <hr class="sidebar-divider" />
 
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link" href="@{/categorias}">
-                    <i class="fas fa-list"></i>
-                    <span>Ordenes</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider" />
-
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/reservas}">
-                    <i class="fas fa-calendar-check"></i>
-                    <span>Metodos de Pago</span></a>
-            </li>
-
-
-            <!-- Divider -->
-            <hr class="sidebar-divider" />
-
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/reservas}">
-                    <i class="fas fa-calendar-check"></i>
-                    <span>Detalles - Carrito</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider" />
-
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/reservas}">
-                    <i class="fas fa-calendar-check"></i>
-                    <span>Carrito</span></a>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider" />
-
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>

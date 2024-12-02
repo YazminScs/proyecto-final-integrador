@@ -3,6 +3,7 @@ package Controlador;
 import DAO.CarritoDAO;
 import DAO.DetalleCarritoDAO;
 import DAO.OrdenDAO;
+import DAO.ProductoDAO;
 import DAO.UsuarioDAO;
 import Modelo.Carrito;
 import Modelo.CarritoInfo;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -170,62 +172,90 @@ public class ControladorUsuarios extends HttpServlet {
 
     private void iniciarSesion(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String username = request.getParameter("signin-username");
-    String password = request.getParameter("signin-password");
+        String password = request.getParameter("signin-password");
 
-    // Sanitización básica de datos de entrada usando Commons Lang
-    String sanitizedUsername = null;
-    String sanitizedPassword = null;
+        // Sanitización básica de datos de entrada usando Commons Lang
+        String sanitizedUsername = null;
+        String sanitizedPassword = null;
 
-    try {
-        // Validar que los campos no estén vacíos y tengan una longitud adecuada
-        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
-            throw new IllegalArgumentException("El nombre de usuario o la contraseña no pueden estar vacíos.");
+        try {
+            // Validar que los campos no estén vacíos y tengan una longitud adecuada
+            if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+                throw new IllegalArgumentException("El nombre de usuario o la contraseña no pueden estar vacíos.");
+            }
+
+            // Limitar la longitud de los campos de entrada
+            sanitizedUsername = StringUtils.substring(username, 0, 50); // Limita el nombre de usuario a 50 caracteres
+            sanitizedPassword = StringUtils.substring(password, 0, 100); // Limita la contraseña a 100 caracteres
+
+            // Opcional: Validar que no haya caracteres inválidos o maliciosos (esto depende de la lógica de tu aplicación)
+            // Se podría usar alguna expresión regular para evitar caracteres especiales, por ejemplo:
+            if (!sanitizedUsername.matches("^[a-zA-Z0-9_]+$")) {
+                throw new IllegalArgumentException("El nombre de usuario contiene caracteres no permitidos.");
+            }
+
+        } catch (IllegalArgumentException e) {
+            // Si ocurre una excepción de validación, redirige a la página de login con un mensaje de error
+            HttpSession session = request.getSession();
+            session.setAttribute("error", "Los datos ingresados no son válidos: " + e.getMessage());
+            response.sendRedirect("Vista/login.jsp");
+            return; // Termina la ejecución si la validación falla
         }
 
-        // Limitar la longitud de los campos de entrada
-        sanitizedUsername = StringUtils.substring(username, 0, 50); // Limita el nombre de usuario a 50 caracteres
-        sanitizedPassword = StringUtils.substring(password, 0, 100); // Limita la contraseña a 100 caracteres
+        UsuarioDAO userDAO = new UsuarioDAO();
+        CarritoDAO carritoDAO = new CarritoDAO();
+        ProductoDAO productoDAO = new ProductoDAO();
+        OrdenDAO ordenDAO = new OrdenDAO();
 
-        // Opcional: Validar que no haya caracteres inválidos o maliciosos (esto depende de la lógica de tu aplicación)
-        // Se podría usar alguna expresión regular para evitar caracteres especiales, por ejemplo:
-        if (!sanitizedUsername.matches("^[a-zA-Z0-9_]+$")) {
-            throw new IllegalArgumentException("El nombre de usuario contiene caracteres no permitidos.");
+        // Verificar las credenciales de usuario
+        if (userDAO.autenticar(sanitizedUsername, sanitizedPassword)) {
+            // Autenticación exitosa
+            HttpSession session = request.getSession();
+            session.setAttribute("username", sanitizedUsername);
+
+            // Verifica el rol y redirige según el tipo de usuario
+            String rol = userDAO.obtenerRol(sanitizedUsername);
+            if ("Administrador".equals(rol)) {
+                session.setAttribute("message", "Inicio de sesión exitoso como Administrador. ¡Bienvenido, " + sanitizedUsername + "!");
+
+                int contadorProductos = productoDAO.contarProductos();
+                int contarOrdenPendientes = ordenDAO.contarOrdenesPendientes();
+                double porcentaje=calcularPorcentajeOrdenesFinalizadas();
+                double total=carritoDAO.sumaTotal();
+
+                //DATOS A VISTA:
+                request.setAttribute("contadorProductos", contadorProductos);
+                request.setAttribute("ordenesPendientes", contarOrdenPendientes);
+                request.setAttribute("porcentaje", porcentaje);
+                request.setAttribute("total", total);
+
+                RequestDispatcher dispatcher = request.getRequestDispatcher("Vista/admin.jsp");
+                dispatcher.forward(request, response);
+            } else if ("Cliente".equals(rol)) {
+                // Registra un carrito si el usuario es cliente
+                carritoDAO.registrarCarrito(userDAO.obtenerUsuarioPorId(userDAO.obtenerIdPorNombreUsuario(sanitizedUsername)));
+                session.setAttribute("message", "Inicio de sesión exitoso como Cliente. ¡Bienvenido, " + sanitizedUsername + "!");
+                response.sendRedirect("index.jsp");
+            }
+        } else {
+            // Si la autenticación falla, redirige al login con un mensaje de error
+            HttpSession session = request.getSession();
+            session.setAttribute("error", "Nombre de usuario o contraseña incorrectos.");
+            response.sendRedirect("Vista/login.jsp");
         }
-
-    } catch (IllegalArgumentException e) {
-        // Si ocurre una excepción de validación, redirige a la página de login con un mensaje de error
-        HttpSession session = request.getSession();
-        session.setAttribute("error", "Los datos ingresados no son válidos: " + e.getMessage());
-        response.sendRedirect("Vista/login.jsp");
-        return; // Termina la ejecución si la validación falla
     }
 
-    UsuarioDAO userDAO = new UsuarioDAO();
-    CarritoDAO carritoDAO = new CarritoDAO();
+    public double calcularPorcentajeOrdenesFinalizadas() {
+        OrdenDAO ordenDAO=new OrdenDAO();
+        int contarOrdenPendientes = ordenDAO.contarOrdenesPendientes();
+        int contarOrdenFinalizadas = ordenDAO.contarOrdenesFinalizadas();
+        int totalOrdenes=contarOrdenFinalizadas+contarOrdenPendientes;
 
-    // Verificar las credenciales de usuario
-    if (userDAO.autenticar(sanitizedUsername, sanitizedPassword)) {
-        // Autenticación exitosa
-        HttpSession session = request.getSession();
-        session.setAttribute("username", sanitizedUsername);
-
-        // Verifica el rol y redirige según el tipo de usuario
-        String rol = userDAO.obtenerRol(sanitizedUsername);
-        if ("Administrador".equals(rol)) {
-            session.setAttribute("message", "Inicio de sesión exitoso como Administrador. ¡Bienvenido, " + sanitizedUsername + "!");
-            response.sendRedirect("Vista/admin.jsp");
-        } else if ("Cliente".equals(rol)) {
-            // Registra un carrito si el usuario es cliente
-            carritoDAO.registrarCarrito(userDAO.obtenerUsuarioPorUsername(sanitizedUsername));
-            session.setAttribute("message", "Inicio de sesión exitoso como Cliente. ¡Bienvenido, " + sanitizedUsername + "!");
-            response.sendRedirect("index.jsp");
+        if (totalOrdenes == 0) {
+            return 0.0; // Evitar división por cero
         }
-    } else {
-        // Si la autenticación falla, redirige al login con un mensaje de error
-        HttpSession session = request.getSession();
-        session.setAttribute("error", "Nombre de usuario o contraseña incorrectos.");
-        response.sendRedirect("Vista/login.jsp");
-    }
+
+        return (contarOrdenFinalizadas / (double) totalOrdenes) * 100;
     }
 
     private void editarSesion(HttpServletRequest request, HttpServletResponse response) throws IOException {

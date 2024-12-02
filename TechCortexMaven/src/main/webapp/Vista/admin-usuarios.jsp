@@ -1,9 +1,3 @@
-<%-- 
-    Document   : admin
-    Created on : 27 oct 2024, 18:11:10
-    Author     : ysuyb
---%>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -14,7 +8,6 @@
         <!-- Custom fonts for this template-->
         <link href="${pageContext.request.contextPath}/Assets/CSS/all.min.css" rel="stylesheet" type="text/css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-        <link href="https://getbootstrap.com/docs/5.2/assets/css/docs.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/Assets/CSS/style-table.css" rel="stylesheet" type="text/css">
         <link
             href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -41,10 +34,19 @@
                         <!-- Page Heading -->
                         <h1 class="h3 mb-2 text-gray-800">Productos</h1>
 
-                        <!-- Botón Registrar Producto -->
-                        <a class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addProductModal">
-                            <i class="fas fa-plus"></i> Registrar Categoria
-                        </a>
+                        <div class="d-flex justify-content-start">
+                            <button type="button" class="btn btn-primary mb-3 me-2" data-bs-toggle="modal" data-bs-target="#registrarModal">
+                                <i class="bi bi-person-plus"></i>Registrar Usuario
+                            </button>
+
+                            <form action="<%=request.getContextPath()%>/ControladorAdmin" method="GET" style="display: inline;">
+                                <input type="hidden" name="accion" value="generarExcelUsuarios">
+                                <button type="submit" class="btn btn-success">
+                                    Descargar Excel
+                                </button>
+                            </form>
+                        </div>
+
 
                         <!-- Tabla de Productos -->
                         <div class="card shadow mb-4">
@@ -90,18 +92,26 @@
                                                     <td class="text-truncate" style="max-width: 100px;">${usuario.rol}</td>
                                                     <td>
                                                         <!-- Botón para abrir el modal -->
-                                                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#editarModal" 
+                                                        <button type="button" 
+                                                                class="btn btn-outline-success" 
+                                                                data-bs-toggle="modal" 
+                                                                data-bs-target="#editarModal" 
                                                                 data-id="${usuario.id}" 
-                                                                data-nombre="${usuario.username}" 
+                                                                data-username="${usuario.username}" 
+                                                                data-email="${usuario.email}" 
+                                                                data-password="${usuario.password}" 
+                                                                data-address="${usuario.address}" 
+                                                                data-phone="${usuario.phone}" 
+                                                                data-rol="${usuario.rol}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                                                             <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325"></path>
                                                             </svg>
                                                             Editar
                                                         </button>
 
-                                                        <form action="<%=request.getContextPath()%>/ControladorAdmin" method="GET" style="display: inline-block;">
-                                                            <input type="hidden" name="codigo" value="${material.idMaterial}">
-                                                            <button type="submit" name="accion" value="eliminar" class="btn btn-outline-danger">
+                                                        <form action="<%=request.getContextPath()%>/ControladorAdmin?accion=eliminarUsuario" method="GET" style="display: inline-block;">
+                                                            <input type="hidden" name="id" value="${usuario.id}">
+                                                            <button type="submit" name="accion" value="eliminarUsuario" class="btn btn-outline-danger">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                                                 <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"></path>
                                                                 <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"></path>
@@ -109,6 +119,7 @@
                                                                 Eliminar
                                                             </button>
                                                         </form>
+
                                                     </td>
                                                 </tr>
                                             </c:forEach>
@@ -120,62 +131,117 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- Footer -->
-        <%@include file="admin-footer.jsp" %>
 
-        <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
+            <!-- Modal para editar usuario -->
+            <div class="modal fade" id="editarModal" tabindex="-1" aria-labelledby="editarModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editarModalLabel">Editar Usuario</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="<%=request.getContextPath()%>/ControladorAdmin?accion=editarUsuario" method="POST">
+                            <div class="modal-body">
+                                <input type="hidden" id="editar-id" name="id">
 
-        <!-- Logout Modal-->
-        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">
-                            Listo para irte?
-                        </h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
+                                <div class="mb-3">
+                                    <label for="editar-username" class="form-label">Nombre de Usuario</label>
+                                    <input type="text" class="form-control" id="editar-username" name="username" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="editar-email" class="form-label">Correo Electrónico</label>
+                                    <input type="email" class="form-control" id="editar-email" name="email" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="editar-address" class="form-label">Dirección</label>
+                                    <input type="text" class="form-control" id="editar-address" name="address" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="editar-phone" class="form-label">Teléfono</label>
+                                    <input type="number" class="form-control" id="editar-phone" name="phone" required>
+                                </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="modal-body">
-                        Selecciona cerrar sesión para salir de la actual sesión.
-                    </div>
-                    <div class="modal-footer">
-                        <form th:action="@{/logout}" method="post">
-                            <button class="btn btn-secondary" type="button" data-dismiss="modal">
-                                Cancelar
-                            </button>
-                            <button type="submit" class="btn btn-danger">Cerrar Sesión</button>
+                </div>
+            </div>
+
+            <!-- Modal para el registro -->
+            <div class="modal fade" id="registrarModal" tabindex="-1" aria-labelledby="registrarModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="${pageContext.request.contextPath}/ControladorAdmin?accion=registrarUsuario" method="POST">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="registrarModalLabel">Registrar Nuevo Usuario</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label for="username" class="form-label">Nombre de Usuario</label>
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Correo Electrónico</label>
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="password" class="form-label">Contraseña</label>
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="address" class="form-label">Dirección</label>
+                                    <input type="text" class="form-control" id="address" name="address" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="phone" class="form-label">Teléfono</label>
+                                    <input type="number" class="form-control" id="phone" name="phone" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="rol" class="form-label">Rol</label>
+                                    <select class="form-select" id="rol" name="rol" required>
+                                        <option value="Administrador">Administrador</option>
+                                        <option value="Usuario">Usuario</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary" name="accion" value="registrarUsuario">Registrar</button>
+                            </div>
                         </form>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+        <!-- Footer -->
+        <%@include file="admin-footer.jsp" %>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="${pageContext.request.contextPath}/Assets/JS/jquery.min.js"></script>
-    <script src="${pageContext.request.contextPath}/Assets/JS/bootstrap.bundle.min.js"></script>
+        <!-- Bootstrap core JavaScript-->
+        <script src="${pageContext.request.contextPath}/Assets/JS/jquery.min.js"></script>
+        <script src="${pageContext.request.contextPath}/Assets/JS/bootstrap.bundle.min.js"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="${pageContext.request.contextPath}/Assets/JS/jquery.easing.min.js"></script>
+        <!-- Core plugin JavaScript-->
+        <script src="${pageContext.request.contextPath}/Assets/JS/jquery.easing.min.js"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="${pageContext.request.contextPath}/Assets/JS/sb-admin-2.min.js"></script>
+        <!-- Custom scripts for all pages-->
+        <script src="${pageContext.request.contextPath}/Assets/JS/sb-admin-2.min.js"></script>
 
-    <!-- Page level plugins -->
-    <script src="${pageContext.request.contextPath}/Assets/JS/Chart.min.js"></script>
+        <!-- Page level plugins -->
+        <script src="${pageContext.request.contextPath}/Assets/JS/Chart.min.js"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="${pageContext.request.contextPath}/Assets/JS/chart-area-demo.js"></script>
-    <script src="${pageContext.request.contextPath}/Assets/JS/chart-pie-demo.js"></script>
-
-</body>
+        <!-- Page level custom scripts -->
+        <script src="${pageContext.request.contextPath}/Assets/JS/chart-area-demo.js"></script>
+        <script src="${pageContext.request.contextPath}/Assets/JS/chart-pie-demo.js"></script>
+        <script src="${pageContext.request.contextPath}/Assets/JS/admin-usuario-edit.js" type="text/javascript"></script>
+    </body>
 </html>

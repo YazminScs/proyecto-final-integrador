@@ -11,4 +11,6 @@ public interface IProductoDAO {
     Producto obtenerPorId(int id);
     
     boolean actualizarStock(int producto_stock, int producto_id);
+    
+    int contarProductos();
 }
