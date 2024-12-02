@@ -33,24 +33,19 @@ public class ControladorReporte extends HttpServlet {
     private CarritoDAO carritoDAO = new CarritoDAO();
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Obtener carrito_id desde el parámetro de la URL
         String carritoIdParam = request.getParameter("carrito_id");
 
-        // Validar que el carrito_id no sea null o vacío
         if (carritoIdParam == null || carritoIdParam.isEmpty()) {
             response.getWriter().write("Carrito ID no proporcionado.");
             return;
         }
 
-        // Parsear el carrito_id a int
         int carrito_id = Integer.parseInt(carritoIdParam);
 
-        // Establecer la conexión a la base de datos
         Connection conn = null;
         try {
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/tiendita_foley", "root", "");
-
-            // Consultar los datos del carrito
+            
             String sql = "SELECT o.orden_id, p.pago_nom, o.orden_estado, c.carrito_fecha, c.carrito_total, u.usuario_nom "
                     + "FROM carrito c "
                     + "INNER JOIN orden o ON c.carrito_id = o.carrito_id "
@@ -78,17 +73,14 @@ public class ControladorReporte extends HttpServlet {
                 stmt.setInt(1, carrito_id);
                 ResultSet rst = stmt.executeQuery();
 
-                // Configurar respuesta para descargar PDF
                 response.setContentType("application/pdf");
                 response.setHeader("Content-Disposition", "attachment; filename=boleta_" + carrito_id + ".pdf");
 
-                // Crear el documento PDF
                 Document document = new Document();
                 PdfWriter.getInstance(document, response.getOutputStream());
 
                 document.open();
-
-                // Título y detalles de la orden
+                
                 document.add(new Paragraph("Boleta de Orden", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18)));
                 document.add(new Paragraph("Cliente: " + usuario_nom));
                 document.add(new Paragraph("Número de orden: " + orden_id));
@@ -97,7 +89,6 @@ public class ControladorReporte extends HttpServlet {
                 document.add(new Paragraph("Fecha: " + carrito_fecha.toString()));
                 document.add(new Chunk("\n"));
 
-                // Crear la tabla para los productos
                 PdfPTable table = new PdfPTable(4);
                 table.addCell("Producto");
                 table.addCell("Cantidad");
@@ -117,16 +108,13 @@ public class ControladorReporte extends HttpServlet {
                     table.addCell(precio.toString());
                     table.addCell(totalProducto.toString());
 
-                    // Sumar el total de la boleta
                     totalBoleta = totalBoleta.add(totalProducto);
                 }
 
-                // Agregar la tabla y el total al documento
                 document.add(table);
                 document.add(new Chunk("\n"));
                 document.add(new Paragraph("Total: " + carrito_total));
 
-                // Cerrar el documento PDF
                 document.close();
 
             } else {
