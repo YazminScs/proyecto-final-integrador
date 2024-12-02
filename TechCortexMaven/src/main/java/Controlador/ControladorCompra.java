@@ -109,7 +109,7 @@ public class ControladorCompra extends HttpServlet {
         DecimalFormat df = new DecimalFormat("#.00");
         String totalFormateado = df.format(total);
 
-        boolean actualizado = carritoDAO.actualizarCarrito(Double.parseDouble(totalFormateado), carrito_id);
+        boolean actualizado = carritoDAO.actualizarCarrito(total, carrito_id);
         LOGGER.log(Level.INFO, "Carrito actualizado: {0} para carrito ID: {1}", new Object[]{actualizado, carrito_id});
 
         boolean registrado = ordenDAO.registrarOrden(carritoDAO.obtenerCarritoPorId(carrito_id), metodoPagoDAO.obtenerPagoPorId(pago_id), "Pendiente");
@@ -127,7 +127,7 @@ public class ControladorCompra extends HttpServlet {
 
         // Registrar un nuevo carrito para el usuario
         boolean carritoRegistrado = carritoDAO.registrarCarrito(usuario);
-        LOGGER.log(Level.INFO, "Nuevo carrito registrado: {0} para usuario: {1}", new Object[]{carritoRegistrado, usuario.getNombre()});
+        LOGGER.log(Level.INFO, "Nuevo carrito registrado: {0} para usuario: {1}", new Object[]{carritoRegistrado, usuario.getUsername()});
 
         request.setAttribute("carrito_id", carrito_id);
         request.setAttribute("total", totalFormateado);

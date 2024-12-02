@@ -38,54 +38,56 @@
         <div class="container mt-4">
             <c:if test="${not empty carritoInfo}">
                 <c:forEach var="info" items="${carritoInfo}">
-                    <div class="card mb-3 shadow-sm">
-                        <div class="card-header text-white">
-                            <h4>Carrito ID: ${info.carrito.carrito_id}</h4>
-                        </div>
+                    <c:if test="${not empty info.orden.orden_id}">
+                        <div class="card mb-3 shadow-sm">
+                            <div class="card-header text-white">
+                                <h4>Carrito ID: ${info.carrito.carrito_id}</h4>
+                            </div>
 
-                        <div class="card-body">
-                            <p><strong>Orden ID:</strong> ${info.orden.orden_id}</p>
-                            <p><strong>Fecha de Orden:</strong> ${info.carrito.carrito_fecha}</p>
-                            <p><strong>Estado de la Orden:</strong> ${info.orden.orden_estado}</p>
-                            <p><strong>Total:</strong> S/${info.carrito.carrito_total}</p>
+                            <div class="card-body">
+                                <p><strong>Orden ID:</strong> ${info.orden.orden_id}</p>
+                                <p><strong>Fecha de Orden:</strong> ${info.carrito.carrito_fecha}</p>
+                                <p><strong>Estado de la Orden:</strong> ${info.orden.orden_estado}</p>
+                                <p><strong>Total:</strong> S/${info.carrito.carrito_total}</p>
 
-                            <!-- Botón para abrir el modal con animación -->
-                            <button class="btn btn-purple" 
-                                    type="button" 
-                                    data-bs-toggle="modal" 
-                                    data-bs-target="#detallesModal${info.carrito.carrito_id}">
-                                Ver Detalles
-                            </button>
+                                <!-- Botón para abrir el modal con animación -->
+                                <button class="btn btn-purple" 
+                                        type="button" 
+                                        data-bs-toggle="modal" 
+                                        data-bs-target="#detallesModal${info.carrito.carrito_id}">
+                                    Ver Detalles
+                                </button>
 
-                            <!-- Modal para mostrar detalles con animación -->
-                            <div class="modal fade" id="detallesModal${info.carrito.carrito_id}" tabindex="-1" aria-labelledby="detallesModalLabel${info.carrito.carrito_id}" aria-hidden="true">
-                                <div class="modal-dialog" style="margin-top: 10rem">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="detallesModalLabel${info.carrito.carrito_id}">Detalles del Carrito ID: ${info.carrito.carrito_id}</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <h5>Detalles del Carrito:</h5>
-                                            <ul>
-                                                <c:forEach var="detalle" items="${info.detalles}">
-                                                    <li>
-                                                        <strong>Producto:</strong> ${detalle.producto.nombre} <br>
-                                                        <strong>Cantidad:</strong> ${detalle.detalle_cant} <br>
-                                                        <strong>Precio:</strong> S/${detalle.detalle_price} <br>
-                                                        <strong>Subtotal:</strong> S/${detalle.detalle_cant * detalle.detalle_price}
-                                                    </li>
-                                                </c:forEach>
-                                            </ul>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-purple" data-bs-dismiss="modal">Cerrar</button>
+                                <!-- Modal para mostrar detalles con animación -->
+                                <div class="modal fade" id="detallesModal${info.carrito.carrito_id}" tabindex="-1" aria-labelledby="detallesModalLabel${info.carrito.carrito_id}" aria-hidden="true">
+                                    <div class="modal-dialog" style="margin-top: 10rem">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="detallesModalLabel${info.carrito.carrito_id}">Detalles del Carrito ID: ${info.carrito.carrito_id}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <h5>Detalles del Carrito:</h5>
+                                                <ul>
+                                                    <c:forEach var="detalle" items="${info.detalles}">
+                                                        <li>
+                                                            <strong>Producto:</strong> ${detalle.producto.nombre} <br>
+                                                            <strong>Cantidad:</strong> ${detalle.detalle_cant} <br>
+                                                            <strong>Precio:</strong> S/${detalle.detalle_price} <br>
+                                                            <strong>Subtotal:</strong> S/${detalle.detalle_cant * detalle.detalle_price}
+                                                        </li>
+                                                    </c:forEach>
+                                                </ul>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-purple" data-bs-dismiss="modal">Cerrar</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </c:if>
                 </c:forEach>
             </c:if>
 

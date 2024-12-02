@@ -10,6 +10,7 @@ import Modelo.Usuario;
 import java.util.List;
 import java.text.DecimalFormat;
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
@@ -58,10 +59,33 @@ public class ControladorCarrito extends HttpServlet {
                 request.setAttribute("total", totalFormateado);
                 request.setAttribute("miDetalle", miDetalle);
                 request.getRequestDispatcher("Vista/carrito.jsp").forward(request, response);
+                return;
             } catch (IOException | ServletException e) {
                 LOGGER.log(Level.SEVERE, "Error al cargar el carrito: ", e);
                 response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al cargar el carrito");
             }
+        }
+        HttpSession session = request.getSession();
+        String username = (String) session.getAttribute("username");
+        if (username == null) {
+            response.sendRedirect("Vista/login.jsp");
+            return;
+        }
+
+        CarritoDAO carritoDAO = new CarritoDAO();
+        int idProducto = Integer.parseInt(request.getParameter("idProducto"));
+        Producto producto = productoDAO.obtenerPorId(idProducto);
+        Date fechaActual = new Date();
+        java.sql.Date sqlDate = new java.sql.Date(fechaActual.getTime());
+        boolean creado = carritoDAO.registrarCarrito(usuarioDAO.obtenerUsuarioPorId(usuarioDAO.obtenerIdPorNombreUsuario(username)));
+        int carrito_id = carritoDAO.obtenerUltimoIdCarritoPorUsuario(usuarioDAO.obtenerUsuarioPorId(usuarioDAO.obtenerIdPorNombreUsuario(username)));
+        boolean detalle_creado = detalleCarritoDAO.registrarDetalleCarrito(1, producto.getPrecio(), carritoDAO.obtenerCarritoPorId(carrito_id), producto);
+        if (detalle_creado) {
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().write("Producto agregado correctamente.");
+        } else {
+            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.getWriter().write("No se pudo agregar el producto al carrito.");
         }
     }
 
