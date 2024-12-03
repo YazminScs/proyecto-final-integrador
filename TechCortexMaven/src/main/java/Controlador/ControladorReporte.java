@@ -115,7 +115,7 @@ public class ControladorReporte extends HttpServlet {
                     BigDecimal cantidadBD = new BigDecimal(cantidad);
                     BigDecimal totalProducto = precio.multiply(cantidadBD).setScale(2, BigDecimal.ROUND_HALF_UP);
 
-                    table.addCell(producto);
+                    table.addCell("S/"+producto);
                     table.addCell(String.valueOf(cantidad));
                     table.addCell(precio.toString());
                     table.addCell(totalProducto.toString());
@@ -125,7 +125,7 @@ public class ControladorReporte extends HttpServlet {
 
                 document.add(table);
                 document.add(new Chunk("\n"));
-                document.add(new Paragraph("Total: " + carrito_total));
+                document.add(new Paragraph("Total: S/" + carrito_total));
                 document.close();
                 LOGGER.log(Level.INFO, "Documento PDF generado con \u00e9xito para carrito_id: {0}", carrito_id);
             } else {

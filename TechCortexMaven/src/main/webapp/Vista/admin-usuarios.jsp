@@ -14,6 +14,8 @@
             rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
+        <!-- Estilo css (tabla) -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
         <!-- Custom styles for this template-->
         <link href="${pageContext.request.contextPath}/Assets/CSS/sb-admin-2.min.css" rel="stylesheet">
     </head>
@@ -223,6 +225,22 @@
         </div>
         <!-- Footer -->
         <%@include file="admin-footer.jsp" %>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+        <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+
+        <!-- DataTable custom configuration -->
+        <script>
+            $(document).ready(function () {
+                $('#dataTable').DataTable({
+                    "paging": true,
+                    "pageLength": 5,
+                    "lengthMenu": [5, 10, 25, 50],
+                    "dom": '<"top"i>rt<"bottom"flp><"clear">'
+                });
+            });
+        </script>
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 

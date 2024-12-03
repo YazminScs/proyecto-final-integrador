@@ -1,10 +1,6 @@
-<%-- 
-    Document   : admin
-    Created on : 27 oct 2024, 18:11:10
-    Author     : ysuyb
---%>
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -50,8 +46,7 @@
                                                     Ganancias Totales
                                                 </div>
                                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    <span>${total}</span>
-                                                </div>
+                                                    <span><fmt:formatNumber value="${total}" type="number" maxFractionDigits="2" minFractionDigits="2" /></span>                                                </div>
                                             </div>
                                             <div class="col-auto">
                                                 <i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -84,32 +79,19 @@
 
                             <!-- Earnings (Monthly) Card Example -->
                             <div class="col-xl-3 col-md-6 mb-4">
-                                <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card border-left-success shadow h-100 py-2">
                                     <div class="card-body">
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
-                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
-                                                    Reservas entregadas
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                    Porcentaje de órdenes finalizadas
                                                 </div>
-                                                <div class="row no-gutters align-items-center">
-                                                    <div class="col-auto">
-                                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                                                            <span>0.00</span>%
-                                                        </div>
-                                                    </div>
-                                                    <div class="col">
-                                                        <div class="progress progress-sm mr-2">
-                                                            <div class="progress-bar bg-info" role="progressbar"
-                                                                 style="'width: 20%'"
-                                                                 aria-valuenow=aria-valuemin="20"
-                                                                 aria-valuemax="100">
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    <span>${porcentaje}%</span>
                                                 </div>
                                             </div>
                                             <div class="col-auto">
-                                                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                                <i class="fas fa-percentage fa-2x text-gray-300"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -123,10 +105,10 @@
                                         <div class="row no-gutters align-items-center">
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                    Porcentaje de órdenes finalizadas
+                                                    Ordenes pendientes
                                                 </div>
                                                 <div class="h5 mb-0 font-weight-bold text-gray-800">
-                                                    <span>${porcentajeFinalizadas}%</span>
+                                                    <span>${ordenesPendientes}</span>
                                                 </div>
                                             </div>
                                             <div class="col-auto">

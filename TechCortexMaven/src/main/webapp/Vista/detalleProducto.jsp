@@ -31,6 +31,7 @@
                 <div class="col-md-6">
                     <h1 class="product-title">${producto.nombre}</h1>
                     <p class="product-subtitle">Categoria: ${producto.categorias.nombre}</p>
+                    <p class="product-subtitle">Stock: ${producto.stock}</p>
                     <p class="product-price">Precio: S/ ${producto.precio}</p>
 
                     <!-- Descripción del producto -->

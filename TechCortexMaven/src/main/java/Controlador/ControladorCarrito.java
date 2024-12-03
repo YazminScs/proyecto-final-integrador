@@ -77,7 +77,6 @@ public class ControladorCarrito extends HttpServlet {
         Producto producto = productoDAO.obtenerPorId(idProducto);
         Date fechaActual = new Date();
         java.sql.Date sqlDate = new java.sql.Date(fechaActual.getTime());
-        boolean creado = carritoDAO.registrarCarrito(usuarioDAO.obtenerUsuarioPorId(usuarioDAO.obtenerIdPorNombreUsuario(username)));
         int carrito_id = carritoDAO.obtenerUltimoIdCarritoPorUsuario(usuarioDAO.obtenerUsuarioPorId(usuarioDAO.obtenerIdPorNombreUsuario(username)));
         boolean detalle_creado = detalleCarritoDAO.registrarDetalleCarrito(1, producto.getPrecio(), carritoDAO.obtenerCarritoPorId(carrito_id), producto);
         if (detalle_creado) {

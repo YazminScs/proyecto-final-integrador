@@ -209,6 +209,7 @@ public class ControladorUsuarios extends HttpServlet {
 
         // Verificar las credenciales de usuario
         if (userDAO.autenticar(sanitizedUsername, sanitizedPassword)) {
+            getServletContext().setAttribute("username", sanitizedUsername);
             // Autenticación exitosa
             HttpSession session = request.getSession();
             session.setAttribute("username", sanitizedUsername);
@@ -220,8 +221,8 @@ public class ControladorUsuarios extends HttpServlet {
 
                 int contadorProductos = productoDAO.contarProductos();
                 int contarOrdenPendientes = ordenDAO.contarOrdenesPendientes();
-                double porcentaje=calcularPorcentajeOrdenesFinalizadas();
-                double total=carritoDAO.sumaTotal();
+                double porcentaje = calcularPorcentajeOrdenesFinalizadas();
+                double total = carritoDAO.sumaTotal();
 
                 //DATOS A VISTA:
                 request.setAttribute("contadorProductos", contadorProductos);
@@ -246,10 +247,10 @@ public class ControladorUsuarios extends HttpServlet {
     }
 
     public double calcularPorcentajeOrdenesFinalizadas() {
-        OrdenDAO ordenDAO=new OrdenDAO();
+        OrdenDAO ordenDAO = new OrdenDAO();
         int contarOrdenPendientes = ordenDAO.contarOrdenesPendientes();
         int contarOrdenFinalizadas = ordenDAO.contarOrdenesFinalizadas();
-        int totalOrdenes=contarOrdenFinalizadas+contarOrdenPendientes;
+        int totalOrdenes = contarOrdenFinalizadas + contarOrdenPendientes;
 
         if (totalOrdenes == 0) {
             return 0.0; // Evitar división por cero

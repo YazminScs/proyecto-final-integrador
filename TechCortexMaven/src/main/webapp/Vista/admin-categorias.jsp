@@ -17,6 +17,9 @@
 
         <!-- Custom styles for this template-->
         <link href="${pageContext.request.contextPath}/Assets/CSS/sb-admin-2.min.css" rel="stylesheet">
+
+        <!-- Estilo css (tabla) -->
+        <link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
     </head>
     <body id="page-top">
         <!-- Page Wrapper -->
@@ -69,7 +72,7 @@
                                                 <th class="text-light">Nombre</th>
                                                 <th class="text-light">Acciones</th>
                                             </tr>
-                                            </tfoot>
+                                        </tfoot>
                                         <tbody>
                                             <c:forEach var="categoria" items="${listaCategorias}">
                                                 <tr>
@@ -163,30 +166,47 @@
 
         </div>
 
-    <!-- Footer -->
-    <%@include file="admin-footer.jsp" %>
+        <!-- Footer -->
+        <%@include file="admin-footer.jsp" %>
 
-</div>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Bootstrap core JavaScript-->
-<script src="${pageContext.request.contextPath}/Assets/JS/jquery.min.js"></script>
-<script src="${pageContext.request.contextPath}/Assets/JS/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- Core plugin JavaScript-->
-<script src="${pageContext.request.contextPath}/Assets/JS/jquery.easing.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-<!-- Custom scripts for all pages-->
-<script src="${pageContext.request.contextPath}/Assets/JS/sb-admin-2.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
 
-<!-- Page level plugins -->
-<script src="${pageContext.request.contextPath}/Assets/JS/Chart.min.js"></script>
+    <!-- DataTable custom configuration -->
+    <script>
+        $(document).ready(function () {
+            $('#dataTable').DataTable({
+                "paging": true,
+                "pageLength": 5,
+                "lengthMenu": [5, 10, 25, 50],
+                "dom": '<"top"i>rt<"bottom"flp><"clear">'
+            });
+        });
+    </script>
 
-<!-- Page level custom scripts -->
-<script src="${pageContext.request.contextPath}/Assets/JS/chart-area-demo.js"></script>
-<script src="${pageContext.request.contextPath}/Assets/JS/chart-pie-demo.js"></script>
-<script src="${pageContext.request.contextPath}/Assets/JS/admin-categoria-edit.js"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="${pageContext.request.contextPath}/Assets/JS/jquery.min.js"></script>
+    <script src="${pageContext.request.contextPath}/Assets/JS/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="${pageContext.request.contextPath}/Assets/JS/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="${pageContext.request.contextPath}/Assets/JS/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="${pageContext.request.contextPath}/Assets/JS/Chart.min.js"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="${pageContext.request.contextPath}/Assets/JS/chart-area-demo.js"></script>
+    <script src="${pageContext.request.contextPath}/Assets/JS/chart-pie-demo.js"></script>
+    <script src="${pageContext.request.contextPath}/Assets/JS/admin-categoria-edit.js"></script>
 
 </body>
 </html>
