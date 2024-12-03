@@ -8,7 +8,4 @@
             30
         </session-timeout>
     </session-config>
-    <listener>
-        <listener-class>Configuracion.AppListener</listener-class>
-    </listener>
 </web-app>
